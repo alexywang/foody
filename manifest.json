@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "Foody",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js", "foody.js"],
+      "css": ["modal.css"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["contextMenus", "tabs"],
+  "icons": {
+    "48": "icon.png"
+  }
+}
