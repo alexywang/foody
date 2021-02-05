@@ -10,7 +10,7 @@ I often find myself searching on Google for something like:
 "Happy hour in Miami"
 
 I end up clicking on a blog like blogTO or TimeOut that offers me a list of 10-100 restaurants with 1 picture and a brief description.
-![](readme_screenshot.png)
+<img src="readme_screenshot.png" alt="drawing" width="300"/>
 
 Then every time I see a potential candidate for a for a new restaurant I have to:
 
