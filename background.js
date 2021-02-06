@@ -1,5 +1,7 @@
+// background.js are scripts run for chrome actions
 const CONTEXT_MENU_ID = 'CONTEXT_MENU';
 
+// Notify a listener defined in content.js that an action has been performed.
 function sendMessageToActiveTab(message, content) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     let activeTab = tabs[0];

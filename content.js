@@ -1,10 +1,14 @@
-console.log('Foody extension running');
+// content.js runs javascript on active tab
+
+const ENDPOINT = 'http://localhost:4000/restaurant';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === 'clicked_browser_action') {
+    // Click on icon in extensions tray
     browserAction();
   }
   if (request.message === 'clicked_context_menu') {
+    // Click context menu item Show {restaurant} on Foody
     showOnFoody(request.content);
   }
 });
@@ -21,7 +25,7 @@ function showOnFoody(content) {
     <div id="foody-modal" class="foody-modal">
       <div class="foody-modal-content">
       <span class="foody-modal-close">&times;</span>
-        <p>Some text in the Modal..</p>
+        <iframe class="foody-iframe" src="https://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>   
       </div>
     </div>
   `;

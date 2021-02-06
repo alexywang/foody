@@ -82,3 +82,9 @@
   background-color: #5cb85c;
   color: white;
 }
+
+.foody-iframe {
+  display: block;
+  width: 100%;
+  border-width: 0;
+}
