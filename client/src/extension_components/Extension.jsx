@@ -19,22 +19,23 @@ export function Extension() {
     return axios.get('/location');
   };
 
-  const getYelpSearch = (lat, lng) => {
+  const getYelpSearch = (restaurantName, lat, lng) => {
     return axios.get('/yelp-restaurant', {
       params: {
+        restaurantName,
         lat,
         lng,
       },
     });
   };
 
-  const setup = async () => {
+  const setup = async (restaurantName) => {
     // Get location first as other requests depend on it
     const fetchedLocation = await getLocation();
     const lat = fetchedLocation.data.latitude;
     const lng = fetchedLocation.data.longitude;
     console.log(fetchedLocation.data);
-    const yelpSearchData = await getYelpSearch(lat, lng);
+    const yelpSearchData = await getYelpSearch(restaurantName, lat, lng);
     setYelpSearchData(yelpSearchData.data);
     console.log(yelpSearchData.data);
   };
@@ -43,9 +44,10 @@ export function Extension() {
   useEffect(() => {
     // Get query params
     const params = getParams();
-    setRestaurantName(params.get('name'));
+    const restaurantName = params.get('name');
+    setRestaurantName(restaurantName);
 
-    setup();
+    setup(restaurantName);
   }, []);
 
   return (

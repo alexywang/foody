@@ -1,10 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
 
 const PORT = process.env.PORT || 4000;
-console.log(process.env.YELP_API_KEY);
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
 
 app.use(cors());
@@ -18,11 +18,11 @@ app.use('/location', async (req, res) => {
 
 // Yelp API business search.
 app.use('/yelp-restaurant', async (req, res) => {
-  const { name, lat, lng } = req.params;
+  const { restaurantName, lat, lng } = req.query;
   try {
-    const apiResponse = await axios.get('https://api.yelp.com/v3/business/search', {
+    const apiResponse = await axios.get('https://api.yelp.com/v3/businesses/search', {
       params: {
-        term: name,
+        term: restaurantName,
         latitude: lat,
         longitude: lng,
       },
