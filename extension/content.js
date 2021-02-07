@@ -1,6 +1,6 @@
 // content.js runs javascript on active tab
 
-const ENDPOINT = 'http://localhost:4000/restaurant';
+const ENDPOINT = 'http://localhost:3000';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === 'clicked_browser_action') {
@@ -17,15 +17,21 @@ function browserAction() {
   console.log('Foddy extension clicked');
 }
 
+function getLocation() {}
+
 function showOnFoody(content) {
   console.log(content);
   console.log('Foody context menu clicked for ' + content.info.selectionText);
+
+  const restaurant = content.info.selectionText;
+  const location = getLocation();
+  const url = `${ENDPOINT}/?name=${restaurant}&location=${location}`;
 
   document.body.innerHTML += `
     <div id="foody-modal" class="foody-modal">
       <div class="foody-modal-content">
       <span class="foody-modal-close">&times;</span>
-        <iframe class="foody-iframe" src="https://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>   
+        <iframe class="foody-iframe" src="${url}"://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>   
       </div>
     </div>
   `;
