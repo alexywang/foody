@@ -17,7 +17,15 @@ function browserAction() {
   console.log('Foddy extension clicked');
 }
 
-function getLocation() {}
+function getLocation() {
+  // TODO: Get lat long or postal code from client
+}
+
+// Remove modal so on subsequent context menu clicks the first one doesn't keep showing up.
+function removeModal() {
+  const modal = document.getElementById('foody-modal');
+  modal.remove();
+}
 
 function showOnFoody(content) {
   console.log(content);
@@ -43,12 +51,14 @@ function showOnFoody(content) {
   let closeButtonSpan = document.getElementsByClassName('foody-modal-close')[0];
   closeButtonSpan.onclick = function () {
     modal.style.display = 'none';
+    removeModal();
   };
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = 'none';
+      removeModal();
     }
   };
 }
