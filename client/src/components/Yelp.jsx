@@ -1,0 +1,1 @@
+function Yelp({ name, location }) {}
