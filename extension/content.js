@@ -17,10 +17,6 @@ function browserAction() {
   console.log('Foddy extension clicked');
 }
 
-function getLocation() {
-  // TODO: Get lat long or postal code from client
-}
-
 // Remove modal so on subsequent context menu clicks the first one doesn't keep showing up.
 function removeModal() {
   const modal = document.getElementById('foody-modal');
@@ -32,8 +28,7 @@ function showOnFoody(content) {
   console.log('Foody context menu clicked for ' + content.info.selectionText);
 
   const restaurant = content.info.selectionText;
-  const location = getLocation();
-  const url = `${ENDPOINT}?name=${restaurant}&location=${location}`;
+  const url = `${ENDPOINT}?name=${restaurant}`;
 
   document.body.innerHTML += `
     <div id="foody-modal" class="foody-modal">
