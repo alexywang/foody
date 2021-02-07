@@ -22,8 +22,6 @@ export function Extension() {
     setLocation(geolocation);
   };
 
-  const get;
-
   // componentDidMount
   useEffect(() => {
     // Get query params
