@@ -15,11 +15,28 @@ export function Extension() {
   // API data
   const [yelpSearchData, setYelpSearchData] = useState();
 
-  const getLocation = async () => {
-    const response = await axios.get('/location');
-    const geolocation = response.data;
-    console.log(geolocation);
-    setLocation(geolocation);
+  const getLocation = () => {
+    return axios.get('/location');
+  };
+
+  const getYelpSearch = (lat, lng) => {
+    return axios.get('/yelp-restaurant', {
+      params: {
+        lat,
+        lng,
+      },
+    });
+  };
+
+  const setup = async () => {
+    // Get location first as other requests depend on it
+    const fetchedLocation = await getLocation();
+    const lat = fetchedLocation.data.latitude;
+    const lng = fetchedLocation.data.longitude;
+    console.log(fetchedLocation.data);
+    const yelpSearchData = await getYelpSearch(lat, lng);
+    setYelpSearchData(yelpSearchData.data);
+    console.log(yelpSearchData.data);
   };
 
   // componentDidMount
@@ -28,8 +45,7 @@ export function Extension() {
     const params = getParams();
     setRestaurantName(params.get('name'));
 
-    // Get location
-    getLocation();
+    setup();
   }, []);
 
   return (
