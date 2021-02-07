@@ -1,6 +1,6 @@
 // content.js runs javascript on active tab
 
-const ENDPOINT = 'http://localhost:3000';
+const ENDPOINT = 'http://localhost:3000/restaurants';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === 'clicked_browser_action') {
@@ -25,7 +25,7 @@ function showOnFoody(content) {
 
   const restaurant = content.info.selectionText;
   const location = getLocation();
-  const url = `${ENDPOINT}/?name=${restaurant}&location=${location}`;
+  const url = `${ENDPOINT}?name=${restaurant}&location=${location}`;
 
   document.body.innerHTML += `
     <div id="foody-modal" class="foody-modal">

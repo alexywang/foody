@@ -1,28 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
-import { useEffect, useState } from 'react';
-
-function getParams() {
-  let search = window.location.search;
-  return new URLSearchParams(search);
-}
+import { Router, Switch, Route } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
+import { Extension } from './extension_components/Extension';
+import { Home } from './site_components/Home';
 
 function App() {
-  const [params, setParams] = useState();
-
-  useEffect(() => {
-    // Get query params
-    const params = getParams();
-    setParams({
-      name: params.get('name'),
-      location: params.get('location'),
-    });
-  }, []);
-
   return (
-    <div>
-      <h1>{params?.name}</h1>
-    </div>
+    <BrowserRouter>
+      <Route exact path="/" exact component={Home}></Route>
+      <Route path="/restaurants" exact component={Extension}></Route>
+    </BrowserRouter>
   );
 }
 

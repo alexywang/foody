@@ -1,0 +1,1 @@
+function Infobar({ name, location }) {}
