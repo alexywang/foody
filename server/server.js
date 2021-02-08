@@ -29,34 +29,65 @@ app.use('/yelp-restaurant', async (req, res) => {
     });
     res.json(apiResponse.data);
   } catch (err) {
+    console.error(err);
     res.sendStatus(500);
   }
 });
 
 // Google Distance Matrix API
 app.use('/google-distance-matrix', async (req, res) => {
-  const { lat, lng, targetLat, targetLng } = req.query;
-  const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
-  let promises = [];
-  for (const travelMode of travelModes) {
-    promises.push(
-      axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
-        params: {
-          origins: `${lat},${lng}`,
-          destinations: `${targetLat}, ${targetLng}`,
-          mode: travelMode,
-          key: process.env.GOOGLE_MAPS_API_KEY,
-        },
-      })
-    );
-  }
+  try {
+    const { lat, lng, targetLat, targetLng } = req.query;
+    const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
+    let promises = [];
+    for (const travelMode of travelModes) {
+      promises.push(
+        axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
+          params: {
+            origins: `${lat},${lng}`,
+            destinations: `${targetLat}, ${targetLng}`,
+            mode: travelMode,
+            key: process.env.GOOGLE_API_KEY,
+          },
+        })
+      );
+    }
 
-  const responses = await Promise.all(promises);
-  let distanceData = {};
-  for (var i = 0; i < travelModes.length; i++) {
-    distanceData[travelModes[i]] = responses[i].data.rows[0].elements[0];
+    const responses = await Promise.all(promises);
+    let distanceData = {};
+    for (var i = 0; i < travelModes.length; i++) {
+      distanceData[travelModes[i]] = responses[i].data.rows[0].elements[0];
+    }
+    res.json(distanceData);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
   }
-  res.json(distanceData);
+});
+
+//TODO: Google places API to get restaurant website, ratings, and photos
+app.use('/google-places', async (req, res) => {
+  const { restaurantName, lat, lng, phoneNumber } = req.query;
+
+  let promises = [];
+  try {
+    const apiResponse = await axios.get(
+      'https://maps.googleapis.com/maps/api/place/findplacefromtext/json',
+      {
+        params: {
+          key: process.env.GOOGLE_API_KEY,
+          inputtype: 'textquery',
+          input: restaurantName,
+          fields: 'name,opening_hours,place_id,rating',
+        },
+      }
+    );
+
+    res.json(apiResponse.data);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 });
 
 app.listen(PORT, () => {
