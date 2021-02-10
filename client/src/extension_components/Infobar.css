@@ -1,0 +1,12 @@
+.restaurant-title {
+  color: rgba(71, 210, 160, 1);
+  font-size: 3em;
+  font-weight: 100;
+}
+.infobar-flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 60%;
+}

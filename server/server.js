@@ -90,6 +90,24 @@ app.use('/google-places', async (req, res) => {
   }
 });
 
+app.use('/google-place-details', async (req, res) => {
+  const { googlePlaceId } = req.query;
+  try {
+    const apiResponse = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
+      params: {
+        key: process.env.GOOGLE_API_KEY,
+        place_id: googlePlaceId,
+        fields: 'website',
+      },
+    });
+
+    res.json(apiResponse.data);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(PORT, () => {
   console.log('Listening on port ' + PORT + '...');
 });
