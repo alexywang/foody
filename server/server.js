@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
+const { getYelpPhotos } = require('./yelp-scraper');
 
 const PORT = process.env.PORT || 4000;
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
@@ -112,6 +113,7 @@ app.get('/google-place-details', async (req, res) => {
 // TODO: Use yelp business base url to find and scrape srcs on pictures page
 app.get('/yelp-photo-scrape', async (req, res) => {
   const { yelpUrl } = req.query;
+  getYelpPhotos(yelpUrl);
   res.json({ 'yelp-photo-scrape': 'not implemented' });
 });
 
