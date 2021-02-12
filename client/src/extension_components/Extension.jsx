@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { SERVER_URL } from '../constants.js';
 import { Infobar } from './Infobar';
+import { Pictures } from './Pictures';
+import './Extension.css';
 const axios = require('axios').default;
 axios.defaults.baseURL = SERVER_URL;
 
@@ -157,12 +159,18 @@ export function Extension() {
 
   return (
     <div>
-      <Infobar
-        yelpRestaurant={getTopYelpResult(yelpSearchData)}
-        googleDistanceData={googleDistanceData}
-        googlePlacesRestaurant={googlePlacesData}
-        location={location}
-      />
+      <div className="left-section">
+        <Infobar
+          yelpRestaurant={getTopYelpResult(yelpSearchData)}
+          googleDistanceData={googleDistanceData}
+          googlePlacesRestaurant={googlePlacesData}
+          location={location}
+        />
+        <Pictures
+          yelpRestaurant={getTopYelpResult(yelpSearchData)}
+          googlePlacesRestaurant={googlePlacesData}
+        />
+      </div>
     </div>
   );
 }

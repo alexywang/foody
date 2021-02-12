@@ -65,7 +65,7 @@ app.use('/google-distance-matrix', async (req, res) => {
   }
 });
 
-//TODO: Google places API to get restaurant website, ratings, and photos
+// Google places API to get restaurant website, ratings, and photos
 app.use('/google-places', async (req, res) => {
   const { restaurantName, lat, lng, phoneNumber } = req.query;
 
@@ -90,6 +90,7 @@ app.use('/google-places', async (req, res) => {
   }
 });
 
+// Google place details API to get rating and photo references
 app.use('/google-place-details', async (req, res) => {
   const { googlePlaceId } = req.query;
   try {
@@ -97,7 +98,7 @@ app.use('/google-place-details', async (req, res) => {
       params: {
         key: process.env.GOOGLE_API_KEY,
         place_id: googlePlaceId,
-        fields: 'website',
+        fields: 'website,photo',
       },
     });
 
@@ -106,6 +107,11 @@ app.use('/google-place-details', async (req, res) => {
     console.error(err);
     res.sendStatus(500);
   }
+});
+
+// TODO: Use yelp business base url to find and scrape srcs on pictures page
+app.use('yelp-photo-scrape', async (req, res) => {
+  const { yelpUrl } = req.query;
 });
 
 app.listen(PORT, () => {

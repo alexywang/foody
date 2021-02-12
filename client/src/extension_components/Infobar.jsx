@@ -13,7 +13,7 @@ export function Infobar({ yelpRestaurant, googleDistanceData, location, googlePl
     var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
     if (match) {
       var intlCode = match[1] ? '+1 ' : '';
-      return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+      return ['(', match[2], ') ', match[3], '-', match[4]].join('');
     }
     return null;
   }
@@ -43,7 +43,7 @@ export function Infobar({ yelpRestaurant, googleDistanceData, location, googlePl
   console.log(googlePlacesRestaurant);
   return (
     <div className="infobar">
-      <h1 className="restaurant-title">{yelpRestaurant?.name}</h1>
+      <h1 className="restaurant-title">{googlePlacesRestaurant?.name}</h1>
       <div className="infobar-flex-container">
         <div id="infobar-section-contact" className="infobar-section">
           <a href={googlePlacesRestaurant?.result?.website}>
@@ -57,6 +57,8 @@ export function Infobar({ yelpRestaurant, googleDistanceData, location, googlePl
         </div>
         <div id="infobar-section-distance" className="infobar-section">
           Approx. {getTravelTime()} min {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
+          <br />
+          {yelpRestaurant?.location.address1 + ', ' + yelpRestaurant?.location.city}
         </div>
       </div>
     </div>
