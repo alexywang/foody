@@ -11,13 +11,13 @@ app.use(cors());
 app.use(express.json());
 
 // GeolocationDB API
-app.use('/location', async (req, res) => {
+app.get('/location', async (req, res) => {
   const apiResponse = await axios.get('https://geolocation-db.com/json');
   res.json(apiResponse.data);
 });
 
 // Yelp API business search.
-app.use('/yelp-restaurant', async (req, res) => {
+app.get('/yelp-restaurant', async (req, res) => {
   const { restaurantName, lat, lng } = req.query;
   try {
     const apiResponse = await axios.get('https://api.yelp.com/v3/businesses/search', {
@@ -35,7 +35,7 @@ app.use('/yelp-restaurant', async (req, res) => {
 });
 
 // Google Distance Matrix API
-app.use('/google-distance-matrix', async (req, res) => {
+app.get('/google-distance-matrix', async (req, res) => {
   try {
     const { lat, lng, targetLat, targetLng } = req.query;
     const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
@@ -66,7 +66,7 @@ app.use('/google-distance-matrix', async (req, res) => {
 });
 
 // Google places API to get restaurant website, ratings, and photos
-app.use('/google-places', async (req, res) => {
+app.get('/google-places', async (req, res) => {
   const { restaurantName, lat, lng, phoneNumber } = req.query;
 
   let promises = [];
@@ -91,7 +91,7 @@ app.use('/google-places', async (req, res) => {
 });
 
 // Google place details API to get rating and photo references
-app.use('/google-place-details', async (req, res) => {
+app.get('/google-place-details', async (req, res) => {
   const { googlePlaceId } = req.query;
   try {
     const apiResponse = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
@@ -110,8 +110,9 @@ app.use('/google-place-details', async (req, res) => {
 });
 
 // TODO: Use yelp business base url to find and scrape srcs on pictures page
-app.use('yelp-photo-scrape', async (req, res) => {
+app.get('/yelp-photo-scrape', async (req, res) => {
   const { yelpUrl } = req.query;
+  res.json({ 'yelp-photo-scrape': 'not implemented' });
 });
 
 app.listen(PORT, () => {
