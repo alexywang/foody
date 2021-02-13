@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Infobar.css';
 
-export function Infobar({ yelpRestaurant, googleDistanceData, location, googlePlacesRestaurant }) {
+export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestaurant }) {
   const TRAVEL_MODES = ['walking', 'driving', 'bicycling', 'tranist'];
   const TRAVEL_MODE_LANGUAGE = ['walk', 'drive', 'bike ride', 'transit'];
   const RATING_SOURCES = ['Avg.', 'Yelp', 'Google'];

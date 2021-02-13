@@ -30,7 +30,7 @@ export function Pictures({ yelpRestaurant, googlePlacesRestaurant }) {
   console.log(getGooglePhotoReferences());
 
   return (
-    <div class="foody-pictures-flexbox">
+    <div className="foody-pictures-flexbox">
       <p>Google pictures here</p>
     </div>
   );

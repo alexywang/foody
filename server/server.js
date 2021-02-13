@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const { performance } = require('perf_hooks');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
@@ -11,110 +12,147 @@ axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_
 app.use(cors());
 app.use(express.json());
 
-// GeolocationDB API
-app.get('/location', async (req, res) => {
-  const apiResponse = await axios.get('https://geolocation-db.com/json');
-  res.json(apiResponse.data);
-});
+function getLocationData() {
+  return axios.get('https://geolocation-db.com/json');
+}
 
-// Yelp API business search.
-app.get('/yelp-restaurant', async (req, res) => {
-  const { restaurantName, lat, lng } = req.query;
-  try {
-    const apiResponse = await axios.get('https://api.yelp.com/v3/businesses/search', {
-      params: {
-        term: restaurantName,
-        latitude: lat,
-        longitude: lng,
-      },
-    });
-    res.json(apiResponse.data);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
-  }
-});
+function getYelpBusinessSearchData(restaurantName, lat, lng) {
+  return axios.get('https://api.yelp.com/v3/businesses/search', {
+    params: {
+      term: restaurantName,
+      latitude: lat,
+      longitude: lng,
+    },
+  });
+}
 
-// Google Distance Matrix API
-app.get('/google-distance-matrix', async (req, res) => {
-  try {
-    const { lat, lng, targetLat, targetLng } = req.query;
-    const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
-    let promises = [];
-    for (const travelMode of travelModes) {
-      promises.push(
-        axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
-          params: {
-            origins: `${lat},${lng}`,
-            destinations: `${targetLat}, ${targetLng}`,
-            mode: travelMode,
-            key: process.env.GOOGLE_API_KEY,
-          },
-        })
-      );
-    }
-
-    const responses = await Promise.all(promises);
-    let distanceData = {};
-    for (var i = 0; i < travelModes.length; i++) {
-      distanceData[travelModes[i]] = responses[i].data.rows[0].elements[0];
-    }
-    res.json(distanceData);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
-  }
-});
-
-// Google places API to get restaurant website, ratings, and photos
-app.get('/google-places', async (req, res) => {
-  const { restaurantName, lat, lng, phoneNumber } = req.query;
-
+function getGoogleDistanceMatrixData(lat, lng, targetLat, targetLng, travelModes) {
   let promises = [];
-  try {
-    const apiResponse = await axios.get(
-      'https://maps.googleapis.com/maps/api/place/findplacefromtext/json',
-      {
+  for (const travelMode of travelModes) {
+    promises.push(
+      axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
         params: {
+          origins: `${lat},${lng}`,
+          destinations: `${targetLat}, ${targetLng}`,
+          mode: travelMode,
           key: process.env.GOOGLE_API_KEY,
-          inputtype: 'textquery',
-          input: restaurantName,
-          fields: 'name,opening_hours,place_id,rating',
         },
-      }
+      })
     );
-
-    res.json(apiResponse.data);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
   }
-});
+  return promises;
+}
 
-// Google place details API to get rating and photo references
-app.get('/google-place-details', async (req, res) => {
-  const { googlePlaceId } = req.query;
-  try {
-    const apiResponse = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
-      params: {
-        key: process.env.GOOGLE_API_KEY,
-        place_id: googlePlaceId,
-        fields: 'website,photo',
-      },
-    });
+function getGooglePlaceSearchData(restaurantName, lat, lng) {
+  return axios.get('https://maps.googleapis.com/maps/api/place/findplacefromtext/json', {
+    params: {
+      key: process.env.GOOGLE_API_KEY,
+      inputtype: 'textquery',
+      input: restaurantName,
+      fields: 'name,opening_hours,place_id,rating',
+    },
+  });
+}
 
-    res.json(apiResponse.data);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
-  }
-});
+function getGooglePlaceDetails(googlePlaceId) {
+  return axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
+    params: {
+      key: process.env.GOOGLE_API_KEY,
+      place_id: googlePlaceId,
+      fields: 'website,photo',
+    },
+  });
+}
 
 // TODO: Use yelp business base url to find and scrape srcs on pictures page
 app.get('/yelp-photo-scrape', async (req, res) => {
-  const { yelpUrl } = req.query;
-  getYelpPhotos(yelpUrl);
+  // const { yelpUrl } = req.query;
+  // getYelpPhotos(yelpUrl);
   res.json({ 'yelp-photo-scrape': 'not implemented' });
+});
+
+// !! MAIN ENDPOINT
+app.get('/restaurant', async (req, res) => {
+  const { restaurantName, locationData } = req.query;
+  const startTime = performance.now();
+  const location = JSON.parse(locationData);
+  console.log(location);
+
+  // Step 1: Yelp Business Search and Google Places Search
+  let yelpBusinessSearchData;
+  let googlePlaceSearchData;
+  try {
+    let promises = [];
+    promises.push(getYelpBusinessSearchData(restaurantName, location.latitude, location.longitude));
+    promises.push(getGooglePlaceSearchData(restaurantName, location.latitude, location.longitude));
+
+    let responses = await Promise.all(promises);
+    yelpBusinessSearchData = responses[0].data;
+    googlePlaceSearchData = responses[1].data;
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ reason: 'RestaurantSearchFailed' });
+    return;
+  }
+
+  // Step 1.5: Parse out the top search results
+  let yelpBusinessSearchTopResult;
+  let googlePlaceSearchTopResult;
+  try {
+    yelpBusinessSearchTopResult = yelpBusinessSearchData.businesses[0];
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ reason: 'YelpBusinessSearchResultParseFailed' });
+    return;
+  }
+  try {
+    googlePlaceSearchTopResult = googlePlaceSearchData.candidates[0];
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ reason: 'GooglePlaceSearchResultParseFailed' });
+    return;
+  }
+
+  // Step 2: Get Google Distance Matrix Data, Google Place Details and Yelp Photos
+  let googleDistanceMatrixData = {};
+  let googlePlaceDetailsData;
+  const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
+  try {
+    let promises = [];
+    const distanceMatrixPromises = getGoogleDistanceMatrixData(
+      location.latitude,
+      location.longitude,
+      yelpBusinessSearchTopResult.coordinates.latitude,
+      yelpBusinessSearchTopResult.coordinates.longitude,
+      travelModes
+    );
+    promises.push(...distanceMatrixPromises);
+    promises.push(getGooglePlaceDetails(googlePlaceSearchTopResult.place_id));
+
+    const responses = await Promise.all(promises);
+    const googleDistanceMatrixResponses = responses.splice(0, travelModes.length);
+
+    for (var i = 0; i < travelModes.length; i++) {
+      googleDistanceMatrixData[travelModes[i]] =
+        googleDistanceMatrixResponses[i].data.rows[0].elements[0];
+    }
+
+    googlePlaceDetailsData = responses[0].data;
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ reason: 'AdvancedGoogleDataFailed' });
+    return;
+  }
+
+  const endTime = performance.now();
+  console.log(`[Performance] Request took server ${endTime - startTime}ms to handle`);
+  res.json({
+    location,
+    yelpBusinessSearchData: yelpBusinessSearchTopResult,
+    googlePlaceSearchData: googlePlaceSearchTopResult,
+    googleDistanceMatrixData,
+    googlePlaceDetailsData,
+  });
 });
 
 app.listen(PORT, () => {
