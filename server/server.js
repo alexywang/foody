@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const { performance } = require('perf_hooks');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
@@ -72,29 +73,18 @@ app.get('/yelp-photo-scrape', async (req, res) => {
 
 // !! MAIN ENDPOINT
 app.get('/restaurant', async (req, res) => {
-  const { restaurantName } = req.query;
-  const startTime = new Date().getMilliseconds();
+  const { restaurantName, locationData } = req.query;
+  const startTime = performance.now();
+  const location = JSON.parse(locationData);
+  console.log(location);
 
-  // Step 1: Get Location Data
-  let locationData;
-  try {
-    locationData = (await getLocationData()).data;
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ reason: 'LocationFailed' });
-  }
-
-  // Step 2: Yelp Business Search and Google Places Search
+  // Step 1: Yelp Business Search and Google Places Search
   let yelpBusinessSearchData;
   let googlePlaceSearchData;
   try {
     let promises = [];
-    promises.push(
-      getYelpBusinessSearchData(restaurantName, locationData.latitude, locationData.longitude)
-    );
-    promises.push(
-      getGooglePlaceSearchData(restaurantName, locationData.latitude, locationData.longitude)
-    );
+    promises.push(getYelpBusinessSearchData(restaurantName, location.latitude, location.longitude));
+    promises.push(getGooglePlaceSearchData(restaurantName, location.latitude, location.longitude));
 
     let responses = await Promise.all(promises);
     yelpBusinessSearchData = responses[0].data;
@@ -105,7 +95,7 @@ app.get('/restaurant', async (req, res) => {
     return;
   }
 
-  // Step 2.5: Parse out the top search results
+  // Step 1.5: Parse out the top search results
   let yelpBusinessSearchTopResult;
   let googlePlaceSearchTopResult;
   try {
@@ -123,15 +113,15 @@ app.get('/restaurant', async (req, res) => {
     return;
   }
 
-  // Step 3: Get Google Distance Matrix Data, Google Place Details and Yelp Photos
+  // Step 2: Get Google Distance Matrix Data, Google Place Details and Yelp Photos
   let googleDistanceMatrixData = {};
   let googlePlaceDetailsData;
   const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
   try {
     let promises = [];
     const distanceMatrixPromises = getGoogleDistanceMatrixData(
-      locationData.lat,
-      locationData.lng,
+      location.latitude,
+      location.longitude,
       yelpBusinessSearchTopResult.coordinates.latitude,
       yelpBusinessSearchTopResult.coordinates.longitude,
       travelModes
@@ -154,8 +144,10 @@ app.get('/restaurant', async (req, res) => {
     return;
   }
 
+  const endTime = performance.now();
+  console.log(`[Performance] Request took server ${endTime - startTime}ms to handle`);
   res.json({
-    locationData,
+    location,
     yelpBusinessSearchData: yelpBusinessSearchTopResult,
     googlePlaceSearchData: googlePlaceSearchTopResult,
     googleDistanceMatrixData,
