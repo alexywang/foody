@@ -65,8 +65,8 @@ function getGooglePlaceDetails(googlePlaceId) {
 
 // TODO: Use yelp business base url to find and scrape srcs on pictures page
 app.get('/yelp-photo-scrape', async (req, res) => {
-  const { yelpUrl } = req.query;
-  getYelpPhotos(yelpUrl);
+  // const { yelpUrl } = req.query;
+  // getYelpPhotos(yelpUrl);
   res.json({ 'yelp-photo-scrape': 'not implemented' });
 });
 
@@ -141,7 +141,6 @@ app.get('/restaurant', async (req, res) => {
 
     const responses = await Promise.all(promises);
     const googleDistanceMatrixResponses = responses.splice(0, travelModes.length);
-    console.log(googleDistanceMatrixResponses[0]);
 
     for (var i = 0; i < travelModes.length; i++) {
       googleDistanceMatrixData[travelModes[i]] =
@@ -157,8 +156,8 @@ app.get('/restaurant', async (req, res) => {
 
   res.json({
     locationData,
-    yelpBusinessSearchData,
-    googlePlaceSearchData,
+    yelpBusinessSearchData: yelpBusinessSearchTopResult,
+    googlePlaceSearchData: googlePlaceSearchTopResult,
     googleDistanceMatrixData,
     googlePlaceDetailsData,
   });
