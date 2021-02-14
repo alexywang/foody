@@ -2,9 +2,8 @@ const axios = require('axios').default;
 
 // Return a list of photo url's based off a business's base url
 async function getYelpPhotos(businessUrl) {
-  const photosUrl = getYelpPhotosUrl(businessUrl);
-  const photosResponse = (await yelpPhotosRequest(photosUrl)).data;
-  return parsePhotosRequest(photosResponse);
+  const photosResponse = (await yelpPhotosRequest(businessUrl)).data;
+  return parseYelpPhotosRequest(photosResponse);
 }
 
 function getYelpPhotosUrl(businessUrl) {
@@ -14,12 +13,12 @@ function getYelpPhotosUrl(businessUrl) {
 }
 
 // Makes a get request to the public photos url of a yelp business
-function yelpPhotosRequest(photosUrl) {
-  return axios.get(photosUrl);
+function yelpPhotosRequest(businessUrl) {
+  return axios.get(getYelpPhotosUrl(businessUrl));
 }
 
 // Parse the HTML page from the photos request and return a list of photo urls
-function parsePhotosRequest(htmlData) {
+function parseYelpPhotosRequest(htmlData) {
   // Look for srcset tags
   const matches = htmlData.match(/srcset=".*"/gm);
   if (!matches) {
@@ -36,16 +35,14 @@ function parsePhotosRequest(htmlData) {
     }
     const thumbnailUrl = urls[0];
     const splitUrl = thumbnailUrl.split('/');
-    if (splitUrl.length > 5) {
-      matches[i] = null;
-      continue; // Not a picture of the restaurant
-    }
+    // if (splitUrl.length > 6) {
+    //   matches[i] = null;
+    //   continue; // Not a picture of the restaurant
+    // }
     const slug = splitUrl[4];
     matches[i] = `https://s3-media0.fl.yelpcdn.com/bphoto/${slug}/o.jpg`;
   }
-
-  // index 0 is for some reason a tiny version of index 1
-  console.log(matches);
+  // index 0 is for some reason a tiny version of index 1, and last is not a picture of the restaurant
   return matches.splice(1, matches.length - 1);
 }
 
@@ -55,4 +52,6 @@ const photos = getYelpPhotos(testurl);
 
 module.exports = {
   getYelpPhotos,
+  yelpPhotosRequest,
+  parseYelpPhotosRequest,
 };

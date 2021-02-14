@@ -4,7 +4,7 @@ const { performance } = require('perf_hooks');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
-const { getYelpPhotos } = require('./yelp-scraper');
+const { getYelpPhotos, parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
 
 const PORT = process.env.PORT || 4000;
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
@@ -116,6 +116,7 @@ app.get('/restaurant', async (req, res) => {
   // Step 2: Get Google Distance Matrix Data, Google Place Details and Yelp Photos
   let googleDistanceMatrixData = {};
   let googlePlaceDetailsData;
+  let yelpPhotos;
   const travelModes = ['walking', 'driving', 'bicycling', 'transit'];
   try {
     let promises = [];
@@ -128,6 +129,7 @@ app.get('/restaurant', async (req, res) => {
     );
     promises.push(...distanceMatrixPromises);
     promises.push(getGooglePlaceDetails(googlePlaceSearchTopResult.place_id));
+    promises.push(yelpPhotosRequest(yelpBusinessSearchTopResult.url));
 
     const responses = await Promise.all(promises);
     const googleDistanceMatrixResponses = responses.splice(0, travelModes.length);
@@ -138,6 +140,7 @@ app.get('/restaurant', async (req, res) => {
     }
 
     googlePlaceDetailsData = responses[0].data;
+    yelpPhotos = parseYelpPhotosRequest(responses[1].data);
   } catch (err) {
     console.error(err);
     res.status(500).json({ reason: 'AdvancedGoogleDataFailed' });
@@ -152,6 +155,7 @@ app.get('/restaurant', async (req, res) => {
     googlePlaceSearchData: googlePlaceSearchTopResult,
     googleDistanceMatrixData,
     googlePlaceDetailsData,
+    yelpPhotos,
   });
 });
 
