@@ -1,4 +1,4 @@
-## Foody
+## Foody W.I.P.
 
 Foody is a Chrome Extension that takes the friction out of researching new restaurants. 
 
