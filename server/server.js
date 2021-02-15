@@ -64,13 +64,6 @@ function getGooglePlaceDetails(googlePlaceId) {
   });
 }
 
-// TODO: Use yelp business base url to find and scrape srcs on pictures page
-app.get('/yelp-photo-scrape', async (req, res) => {
-  // const { yelpUrl } = req.query;
-  // getYelpPhotos(yelpUrl);
-  res.json({ 'yelp-photo-scrape': 'not implemented' });
-});
-
 // !! MAIN ENDPOINT
 app.get('/restaurant', async (req, res) => {
   const { restaurantName, locationData } = req.query;

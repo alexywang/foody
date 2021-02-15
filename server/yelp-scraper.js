@@ -19,6 +19,7 @@ function yelpPhotosRequest(businessUrl) {
 
 // Parse the HTML page from the photos request and return a list of photo urls
 function parseYelpPhotosRequest(htmlData) {
+  let photos = [];
   // Look for srcset tags
   const matches = htmlData.match(/srcset=".*"/gm);
   if (!matches) {
@@ -33,17 +34,20 @@ function parseYelpPhotosRequest(htmlData) {
       matches[i] = null;
       continue;
     }
-    const thumbnailUrl = urls[0];
+    const thumbnailUrl = urls[0]; // Get smallest thumbnail
     const splitUrl = thumbnailUrl.split('/');
     // if (splitUrl.length > 6) {
     //   matches[i] = null;
     //   continue; // Not a picture of the restaurant
     // }
     const slug = splitUrl[4];
-    matches[i] = `https://s3-media0.fl.yelpcdn.com/bphoto/${slug}/o.jpg`;
+    photos.push({
+      thumbnail: thumbnailUrl,
+      original: `https://s3-media0.fl.yelpcdn.com/bphoto/${slug}/o.jpg`,
+    });
   }
   // index 0 is for some reason a tiny version of index 1, and last is not a picture of the restaurant
-  return matches.splice(1, matches.length - 1);
+  return photos.splice(1, photos.length - 2);
 }
 
 // TESTING
