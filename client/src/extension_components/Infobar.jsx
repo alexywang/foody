@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import './Infobar.css';
+import { Rating } from './Rating';
 
 export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestaurant }) {
   const TRAVEL_MODES = ['walking', 'driving', 'bicycling', 'tranist'];
   const TRAVEL_MODE_LANGUAGE = ['walk', 'drive', 'bike ride', 'transit'];
   const RATING_SOURCES = ['Avg.', 'Yelp', 'Google'];
-  const [ratingSource, setRatingSource] = useState(RATING_SOURCES[0]);
+  const [ratingSource, setRatingSource] = useState(RATING_SOURCES[1]);
   const [activeTravelMode, setActiveTravelMode] = useState(0);
 
   function formatPhoneNumber(phoneNumberString) {
@@ -53,7 +54,8 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
           {formatPhoneNumber(yelpRestaurant?.phone)}
         </div>
         <div id="infobar-section-rating" className="infobar-section">
-          {ratingSource} Rating: {getRating()}
+          {/* {ratingSource} Rating: {getRating()} */}
+          <Rating value={getRating()} source={ratingSource} />
         </div>
         <div id="infobar-section-distance" className="infobar-section">
           Approx. {getTravelTime()} min {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
