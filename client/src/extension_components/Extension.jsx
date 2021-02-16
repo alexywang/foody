@@ -20,6 +20,7 @@ export function Extension() {
   const [googleDistanceMatrixData, setGoogleDistanceMatrixData] = useState();
   const [googlePlaceDetailsData, setGooglePlaceDetailsData] = useState();
   const [yelpPhotos, setYelpPhotos] = useState();
+  const [source, setSource] = useState('Yelp');
 
   async function fetchRestaurantData(restaurantName) {
     const locationData = (await axios.get('https://geo.risk3sixty.com/me')).data;
@@ -57,8 +58,9 @@ export function Extension() {
           yelpRestaurant={yelpBusinessSearchData}
           googleDistanceData={googleDistanceMatrixData}
           googlePlacesRestaurant={{ ...googlePlaceSearchData, ...googlePlaceDetailsData }}
+          source={source}
         />
-        <Pictures yelpPhotos={yelpPhotos} />
+        <Pictures yelpPhotos={yelpPhotos} source={source} />
       </div>
     </div>
   );

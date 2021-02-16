@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import './Infobar.css';
 import { Rating } from './Rating';
 
-export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestaurant }) {
+export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestaurant, source }) {
   const TRAVEL_MODES = ['walking', 'driving', 'bicycling', 'tranist'];
   const TRAVEL_MODE_LANGUAGE = ['walk', 'drive', 'bike ride', 'transit'];
-  const RATING_SOURCES = ['Avg.', 'Yelp', 'Google'];
-  const [ratingSource, setRatingSource] = useState(RATING_SOURCES[1]);
   const [activeTravelMode, setActiveTravelMode] = useState(0);
 
   function formatPhoneNumber(phoneNumberString) {
@@ -17,22 +15,6 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
       return ['(', match[2], ') ', match[3], '-', match[4]].join('');
     }
     return null;
-  }
-
-  function getRating() {
-    const ratings = [yelpRestaurant?.rating, googlePlacesRestaurant?.rating];
-    if (ratingSource === RATING_SOURCES[0]) {
-      // Average
-      const sum = ratings.reduce((a, b) => a + b, 0);
-      const average = sum / ratings.length || 0;
-      return average;
-    } else if (ratingSource === RATING_SOURCES[1]) {
-      // Yelp
-      return yelpRestaurant?.rating;
-    } else if (ratingSource === RATING_SOURCES[2]) {
-      // Google
-      return googlePlacesRestaurant?.rating;
-    }
   }
 
   function getTravelTime() {
@@ -55,7 +37,11 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
         </div>
         <div id="infobar-section-rating" className="infobar-section">
           {/* {ratingSource} Rating: {getRating()} */}
-          <Rating value={getRating()} source={ratingSource} />
+          <Rating
+            yelpRestaurant={yelpRestaurant}
+            googlePlacesRestaurant={googlePlacesRestaurant}
+            source={source}
+          />
         </div>
         <div id="infobar-section-distance" className="infobar-section">
           Approx. {getTravelTime()} min {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
