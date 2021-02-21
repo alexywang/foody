@@ -7,9 +7,13 @@ import axios from 'axios';
 import './Pictures.css';
 axios.defaults.baseURL = SERVER_URL;
 
-export function Pictures({ yelpPhotos, source }) {
-  // Get page n
+const THUMBNAIL_HEIGHT = 135;
+const THUMBNAIL_WIDTH = 135;
 
+const GALLERY_MAX_ROWS = 3;
+const GALLERY_MAX_COLS = 5;
+
+export function Pictures({ yelpPhotos, source }) {
   if (!yelpPhotos) return null;
 
   function renderWithPhotoswipe() {
@@ -28,7 +32,13 @@ export function Pictures({ yelpPhotos, source }) {
                 height={image.height || 600}
               >
                 {({ ref, open }) => (
-                  <img ref={ref} onClick={open} src={photo.thumbnail} width="125" height="125" />
+                  <img
+                    ref={ref}
+                    onClick={open}
+                    src={photo.thumbnail}
+                    width={THUMBNAIL_WIDTH}
+                    height={THUMBNAIL_HEIGHT}
+                  />
                 )}
               </Item>
             );
@@ -56,6 +66,8 @@ function FoodyGallery({ photos }) {
   function onOverlayClicked() {
     setSelectedPhoto(null);
   }
+  // Calculate dimensions of gallery
+
   return (
     <div className="foody-gallery">
       {photos.map((photo, id) => {
@@ -82,8 +94,8 @@ function FoodyGalleryThumbnail({ photo, onClick }) {
       onClick={() => onClick(photo)}
       className="foody-gallery-thumbnail grow-on-hover"
       src={photo.thumbnail}
-      width="135"
-      height="135"
+      max-={THUMBNAIL_WIDTH}
+      height={THUMBNAIL_HEIGHT}
     />
   );
 }
