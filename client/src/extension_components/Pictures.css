@@ -3,6 +3,15 @@
   border-radius: 10px;
 }
 
+.foody-gallery-fullsize {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 .overlay {
   position: fixed; /* Sit on top of the page content */
   display: block; /* Hidden by default */
