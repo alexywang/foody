@@ -48,18 +48,38 @@ export function Pictures({ yelpPhotos, source }) {
 }
 
 function FoodyGallery({ photos }) {
+  const [selectedPhoto, setSelectedPhoto] = useState();
+
+  function onThumbnailClicked(photo) {
+    setSelectedPhoto(photo);
+  }
+  function onOverlayClicked() {
+    setSelectedPhoto(null);
+  }
   return (
     <div className="foody-gallery">
       {photos.map((photo, id) => {
-        return <FoodyGalleryThumbnail key={id} photo={photo} />;
+        return <FoodyGalleryThumbnail onClick={onThumbnailClicked} key={id} photo={photo} />;
       })}
+      <FoodyGalleryOverlay onClick={onOverlayClicked} photo={selectedPhoto} />
     </div>
   );
 }
 
-function FoodyGalleryThumbnail({ photo }) {
+function FoodyGalleryOverlay({ photo, onClick }) {
+  if (!photo) return null;
+
+  return (
+    <div onClick={onClick} className="overlay">
+      <img className="foody-gallery-fullsize" src={photo.original} />
+    </div>
+  );
+}
+
+function FoodyGalleryThumbnail({ photo, onClick }) {
   return (
     <img
+      onClick={() => onClick(photo)}
       className="foody-gallery-thumbnail grow-on-hover"
       src={photo.thumbnail}
       width="135"
