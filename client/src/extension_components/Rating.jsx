@@ -1,4 +1,6 @@
 const YELP_RATING_ASSET_FOLDER = '/yelp_rating_assets/';
+const GOOGLE_RATING_ASSET_FOLDER = '/default_rating_assets/';
+
 export function Rating({ yelpRestaurant, googlePlacesRestaurant, source }) {
   function getRating() {
     const ratings = [yelpRestaurant?.rating, googlePlacesRestaurant?.rating];
@@ -15,7 +17,7 @@ export function Rating({ yelpRestaurant, googlePlacesRestaurant, source }) {
     if (source === 'Yelp') {
       return yelpRestaurant?.review_count;
     } else if (source === 'Google') {
-      throw Error('NotImplemented');
+      return googlePlacesRestaurant?.user_ratings_total;
     }
   }
 
@@ -25,13 +27,16 @@ export function Rating({ yelpRestaurant, googlePlacesRestaurant, source }) {
       ratingAssetPath = `${YELP_RATING_ASSET_FOLDER}${getRating()}.png`;
       break;
     case 'Google':
-      ratingAssetPath = '/google_assets';
+      ratingAssetPath = `${YELP_RATING_ASSET_FOLDER}${(Math.round(getRating() * 2) / 2).toFixed(
+        1
+      )}.png`;
       break;
   }
 
   return (
     <div className="rating-container">
-      <img className="rating-image" src={ratingAssetPath} style={{ width: '40%', height: '40%' }} />
+      {getRating() + ' '}
+      <img className="rating-image" src={ratingAssetPath} style={{ height: '1.3em' }} />
       <p className="reivew-count" style={{ color: 'gray' }}>
         Based on {getNumReviews()} reviews
       </p>

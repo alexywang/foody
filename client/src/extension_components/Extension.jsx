@@ -35,6 +35,8 @@ export function Extension() {
       },
     });
 
+    console.log(response.data);
+
     setYelpBusinessSearchData(response.data.yelpBusinessSearchData);
     setGooglePlaceSearchData(response.data.googlePlaceSearchData);
     setGoogleDistanceMatrixData(response.data.googleDistanceMatrixData);
