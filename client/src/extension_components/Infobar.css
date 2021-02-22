@@ -1,6 +1,11 @@
 .infobar-flex-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
+  align-content: space-between;
   justify-content: space-between;
+}
+
+.infobar-section {
+  margin-right: 10px;
 }
