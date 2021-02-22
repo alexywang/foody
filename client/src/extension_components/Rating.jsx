@@ -27,16 +27,18 @@ export function Rating({ yelpRestaurant, googlePlacesRestaurant, source }) {
       ratingAssetPath = `${YELP_RATING_ASSET_FOLDER}${getRating()}.png`;
       break;
     case 'Google':
-      ratingAssetPath = `${YELP_RATING_ASSET_FOLDER}${(Math.round(getRating() * 2) / 2).toFixed(
-        1
-      )}.png`;
+      ratingAssetPath = `${GOOGLE_RATING_ASSET_FOLDER}${Math.round(getRating())}.png`;
       break;
   }
 
   return (
     <div className="rating-container">
       {getRating() + ' '}
-      <img className="rating-image" src={ratingAssetPath} style={{ height: '1.3em' }} />
+      <img
+        className="rating-image"
+        src={ratingAssetPath}
+        style={{ height: '1.3em', marginTop: '-0.3em' }}
+      />
       <p className="reivew-count" style={{ color: 'gray' }}>
         Based on {getNumReviews()} reviews
       </p>
