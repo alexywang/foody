@@ -26,7 +26,6 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
   console.log(googlePlacesRestaurant);
   return (
     <div className="infobar">
-      <h1 className="restaurant-title">{googlePlacesRestaurant?.name}</h1>
       <div className="infobar-flex-container">
         <div id="infobar-section-contact" className="infobar-section">
           <a href={googlePlacesRestaurant?.result?.website}>

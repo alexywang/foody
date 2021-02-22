@@ -54,6 +54,9 @@ export function Extension() {
   return (
     <div>
       <div className="left-section">
+        <div className="topbar">
+          <h1 className="restaurant-title">{googlePlaceSearchData?.name}</h1>
+        </div>
         <Infobar
           yelpRestaurant={yelpBusinessSearchData}
           googleDistanceData={googleDistanceMatrixData}

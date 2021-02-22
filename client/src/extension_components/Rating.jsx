@@ -1,3 +1,4 @@
+const YELP_RATING_ASSET_FOLDER = '/yelp_rating_assets/';
 export function Rating({ yelpRestaurant, googlePlacesRestaurant, source }) {
   function getRating() {
     const ratings = [yelpRestaurant?.rating, googlePlacesRestaurant?.rating];
@@ -21,7 +22,7 @@ export function Rating({ yelpRestaurant, googlePlacesRestaurant, source }) {
   let ratingAssetPath;
   switch (source) {
     case 'Yelp':
-      ratingAssetPath = `/yelp_assets/${getRating()}.png`;
+      ratingAssetPath = `${YELP_RATING_ASSET_FOLDER}${getRating()}.png`;
       break;
     case 'Google':
       ratingAssetPath = '/google_assets';
