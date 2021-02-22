@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { SERVER_URL } from '../constants.js';
 import { Infobar } from './Infobar';
 import { Pictures } from './Pictures';
+import { SourceSelector } from './SourceSelector';
 import './Extension.css';
 const axios = require('axios').default;
 axios.defaults.baseURL = SERVER_URL;
@@ -56,6 +57,7 @@ export function Extension() {
       <div className="left-section">
         <div className="topbar">
           <h1 className="restaurant-title">{googlePlaceSearchData?.name}</h1>
+          <SourceSelector setSource={setSource} source={source} />
         </div>
         <Infobar
           yelpRestaurant={yelpBusinessSearchData}

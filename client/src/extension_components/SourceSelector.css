@@ -1,0 +1,10 @@
+.source-selector-container img {
+  margin-left: 10px;
+  cursor: pointer;
+}
+.grayscale {
+  filter: grayscale(100%);
+}
+.grayscale:hover {
+  filter: grayscale(0%);
+}

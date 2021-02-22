@@ -1,3 +1,9 @@
 .left-section {
   width: 60%;
 }
+.restaurant-title {
+  color: rgba(70, 210, 160);
+  font-size: 3em;
+  font-weight: 150;
+  display: inline-block;
+}

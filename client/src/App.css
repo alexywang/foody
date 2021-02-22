@@ -4,3 +4,7 @@
 .grow-on-hover:hover {
   transform: scale(1.02);
 }
+
+.grayscale {
+  filter: grayscale(100%);
+}
