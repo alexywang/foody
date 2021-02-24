@@ -16,6 +16,8 @@ function getLocationData() {
   return axios.get('https://geolocation-db.com/json');
 }
 
+// YELP
+
 function getYelpBusinessSearchData(restaurantName, lat, lng) {
   return axios.get('https://api.yelp.com/v3/businesses/search', {
     params: {
@@ -25,6 +27,8 @@ function getYelpBusinessSearchData(restaurantName, lat, lng) {
     },
   });
 }
+
+// GOOGLE
 
 function getGoogleDistanceMatrixData(lat, lng, targetLat, targetLng, travelModes) {
   let promises = [];
@@ -60,6 +64,19 @@ function getGooglePlaceDetails(googlePlaceId) {
       key: process.env.GOOGLE_API_KEY,
       place_id: googlePlaceId,
       fields: 'website,photo',
+    },
+  });
+}
+
+// INSTAGRAM
+
+function getInstagramTopSearchData({ restaurantName, address }) {
+  return axios.get('https://www.instagram.com/web/search/topsearch/', {
+    params: {
+      context: 'blended',
+      query: address,
+      rank_token=0,
+      include_reel: true
     },
   });
 }
@@ -150,6 +167,11 @@ app.get('/restaurant', async (req, res) => {
     googlePlaceDetailsData,
     yelpPhotos,
   });
+});
+
+// Fetch instagram location photos
+app.get('/instagram', (req, res) => {
+  const { restaurantName, address } = req.query;
 });
 
 app.listen(PORT, () => {
