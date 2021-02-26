@@ -68,19 +68,6 @@ function getGooglePlaceDetails(googlePlaceId) {
   });
 }
 
-// INSTAGRAM
-
-function getInstagramTopSearchData(restaurantName, address) {
-  return axios.get('https://www.instagram.com/web/search/topsearch/', {
-    params: {
-      context: 'blended',
-      query: address,
-      rank_token: 0,
-      include_reel: true,
-    },
-  });
-}
-
 // !! MAIN ENDPOINT
 app.get('/restaurant', async (req, res) => {
   const { restaurantName, latitude, longitude } = req.query;
@@ -164,13 +151,6 @@ app.get('/restaurant', async (req, res) => {
     googlePlaceDetailsData,
     yelpPhotos,
   });
-});
-
-// Fetch instagram location photos
-app.get('/instagram', async (req, res) => {
-  const { restaurantName, address } = req.query;
-  const instagramTopSearchResponse = await getInstagramTopSearchData(restaurantName, address);
-  res.json(instagramTopSearchResponse.data);
 });
 
 app.listen(PORT, () => {
