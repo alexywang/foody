@@ -70,31 +70,29 @@ function getGooglePlaceDetails(googlePlaceId) {
 
 // INSTAGRAM
 
-function getInstagramTopSearchData({ restaurantName, address }) {
+function getInstagramTopSearchData(restaurantName, address) {
   return axios.get('https://www.instagram.com/web/search/topsearch/', {
     params: {
       context: 'blended',
       query: address,
-      rank_token=0,
-      include_reel: true
+      rank_token: 0,
+      include_reel: true,
     },
   });
 }
 
 // !! MAIN ENDPOINT
 app.get('/restaurant', async (req, res) => {
-  const { restaurantName, locationData } = req.query;
+  const { restaurantName, latitude, longitude } = req.query;
   const startTime = performance.now();
-  const location = JSON.parse(locationData);
-  console.log(location);
 
   // Step 1: Yelp Business Search and Google Places Search
   let yelpBusinessSearchData;
   let googlePlaceSearchData;
   try {
     let promises = [];
-    promises.push(getYelpBusinessSearchData(restaurantName, location.latitude, location.longitude));
-    promises.push(getGooglePlaceSearchData(restaurantName, location.latitude, location.longitude));
+    promises.push(getYelpBusinessSearchData(restaurantName, latitude, longitude));
+    promises.push(getGooglePlaceSearchData(restaurantName, latitude, longitude));
 
     let responses = await Promise.all(promises);
     yelpBusinessSearchData = responses[0].data;
@@ -131,8 +129,8 @@ app.get('/restaurant', async (req, res) => {
   try {
     let promises = [];
     const distanceMatrixPromises = getGoogleDistanceMatrixData(
-      location.latitude,
-      location.longitude,
+      latitude,
+      longitude,
       yelpBusinessSearchTopResult.coordinates.latitude,
       yelpBusinessSearchTopResult.coordinates.longitude,
       travelModes
@@ -160,7 +158,6 @@ app.get('/restaurant', async (req, res) => {
   const endTime = performance.now();
   console.log(`[Performance] Request took server ${endTime - startTime}ms to handle`);
   res.json({
-    location,
     yelpBusinessSearchData: yelpBusinessSearchTopResult,
     googlePlaceSearchData: googlePlaceSearchTopResult,
     googleDistanceMatrixData,
@@ -170,8 +167,10 @@ app.get('/restaurant', async (req, res) => {
 });
 
 // Fetch instagram location photos
-app.get('/instagram', (req, res) => {
+app.get('/instagram', async (req, res) => {
   const { restaurantName, address } = req.query;
+  const instagramTopSearchResponse = await getInstagramTopSearchData(restaurantName, address);
+  res.json(instagramTopSearchResponse.data);
 });
 
 app.listen(PORT, () => {

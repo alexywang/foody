@@ -28,10 +28,8 @@ export function Extension() {
     const response = await axios.get('/restaurant', {
       params: {
         restaurantName,
-        locationData: {
-          latitude: locationData.ll[0],
-          longitude: locationData.ll[1],
-        },
+        latitude: locationData.ll[0],
+        longitude: locationData.ll[1],
       },
     });
 
