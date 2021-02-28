@@ -16,39 +16,6 @@ const GALLERY_MAX_COLS = 5;
 export function Pictures({ yelpPhotos, source }) {
   if (!yelpPhotos) return null;
 
-  function renderWithPhotoswipe() {
-    return (
-      <div className="foody-pictures-flexbox">
-        <h3>Pictures from Yelp</h3>
-        <Gallery>
-          {yelpPhotos.map((photo) => {
-            var image = new Image();
-            image.src = photo.original;
-            return (
-              <Item
-                original={photo.original}
-                thumbnial={photo.original}
-                width={image.width || 600}
-                height={image.height || 600}
-              >
-                {({ ref, open }) => (
-                  <img
-                    ref={ref}
-                    onClick={open}
-                    src={photo.thumbnail}
-                    width={THUMBNAIL_WIDTH}
-                    height={THUMBNAIL_HEIGHT}
-                  />
-                )}
-              </Item>
-            );
-          })}
-        </Gallery>
-      </div>
-    );
-  }
-
-  // return renderWithPhotoswipe();
   return (
     <div className="picutres-container">
       <h3>Photos from {source}</h3>
