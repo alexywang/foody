@@ -2,7 +2,7 @@ import './SourceSelector.css';
 const LOGO_PATH = '/logos/';
 
 const LOGO_SIZE = 30;
-export function SourceSelector({ setSource, source }) {
+export function SourceSelector({ setSource, source, onGoogleClick }) {
   const SOURCE_NAMES = ['Yelp', 'Google'];
 
   function getSourceLogo(sourceName) {
@@ -22,7 +22,10 @@ export function SourceSelector({ setSource, source }) {
           <img
             key={sourceName}
             className={className}
-            onClick={() => setSource(sourceName)}
+            onClick={() => {
+              setSource(sourceName);
+              if (sourceName === 'Google') onGoogleClick();
+            }}
             src={getSourceLogo(sourceName)}
             width={LOGO_SIZE}
             style={{ marginTop: -LOGO_SIZE / 2 - 5 }}

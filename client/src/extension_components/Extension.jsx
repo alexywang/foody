@@ -21,6 +21,7 @@ export function Extension() {
   const [googleDistanceMatrixData, setGoogleDistanceMatrixData] = useState();
   const [googlePlaceDetailsData, setGooglePlaceDetailsData] = useState();
   const [yelpPhotos, setYelpPhotos] = useState();
+  const [googlePhotos, setGooglePhotos] = useState();
   const [source, setSource] = useState('Yelp');
 
   async function fetchRestaurantData(restaurantName) {
@@ -43,6 +44,20 @@ export function Extension() {
     return response.data;
   }
 
+  async function getGooglePhotos() {
+    if (!googlePlaceDetailsData?.result?.photos) return null;
+    const photoReferences = googlePlaceDetailsData.result.photos.map(
+      (photo) => photo.photo_reference
+    );
+    const googlePhotosResponse = await axios.get('/photos/google', {
+      params: {
+        photoReferences,
+      },
+    });
+    console.log('Google photos');
+    console.log(googlePhotosResponse.data);
+  }
+
   // componentDidMount
   useEffect(() => {
     // Get query params
@@ -57,7 +72,7 @@ export function Extension() {
       <div className="left-section">
         <div className="topbar">
           <h1 className="restaurant-title">{googlePlaceSearchData?.name}</h1>
-          <SourceSelector setSource={setSource} source={source} />
+          <SourceSelector setSource={setSource} source={source} onGoogleClick={getGooglePhotos} />
         </div>
         <Infobar
           yelpRestaurant={yelpBusinessSearchData}
@@ -65,7 +80,7 @@ export function Extension() {
           googlePlacesRestaurant={{ ...googlePlaceSearchData, ...googlePlaceDetailsData }}
           source={source}
         />
-        <Pictures yelpPhotos={yelpPhotos} source={source} />
+        <Pictures yelpPhotos={yelpPhotos} source={source} googlePhotos={googlePhotos} />
       </div>
     </div>
   );

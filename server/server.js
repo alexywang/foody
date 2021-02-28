@@ -73,8 +73,8 @@ function getGooglePhotoWithReference(photoReference) {
     params: {
       key: process.env.GOOGLE_API_KEY,
       photoreference: photoReference,
-      maxHeight: 1600,
-      maxWidth: 1600,
+      maxheight: 1600,
+      maxwidth: 1600,
     },
   });
 }
@@ -89,6 +89,7 @@ app.get('/photos/google', async (req, res) => {
     }
 
     const photoResponses = await Promise.all(photoRequests);
+    console.log(photoResponses[0]);
     const photoResponseData = photoResponses.map((res) => res.data);
     res.json(photoResponseData);
   } catch (err) {

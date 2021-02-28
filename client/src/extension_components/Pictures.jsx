@@ -1,8 +1,5 @@
 import { SERVER_URL } from '../constants.js';
 import { useEffect, useState } from 'react';
-import 'photoswipe/dist/photoswipe.css';
-import 'photoswipe/dist/default-skin/default-skin.css';
-import { Gallery, Item } from 'react-photoswipe-gallery';
 import axios from 'axios';
 import './Pictures.css';
 axios.defaults.baseURL = SERVER_URL;
@@ -13,13 +10,21 @@ const THUMBNAIL_WIDTH = 135;
 const GALLERY_MAX_ROWS = 3;
 const GALLERY_MAX_COLS = 5;
 
-export function Pictures({ yelpPhotos, source }) {
+export function Pictures({ yelpPhotos, source, googlePhotos }) {
   if (!yelpPhotos) return null;
+
+  function getPhotosForSource() {
+    if (source === 'Yelp') {
+      return yelpPhotos;
+    } else if (source === 'Google') {
+      return googlePhotos;
+    }
+  }
 
   return (
     <div className="picutres-container">
       <h3>Photos from {source}</h3>
-      <FoodyGallery photos={yelpPhotos} />
+      <FoodyGallery photos={getPhotosForSource()} />
     </div>
   );
 }
@@ -34,6 +39,9 @@ function FoodyGallery({ photos }) {
     setSelectedPhoto(null);
   }
   // Calculate dimensions of gallery
+  if (!photos) {
+    return null; // TODO: Return a loading spinner here
+  }
 
   return (
     <div className="foody-gallery">
