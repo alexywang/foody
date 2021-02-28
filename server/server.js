@@ -68,6 +68,35 @@ function getGooglePlaceDetails(googlePlaceId) {
   });
 }
 
+function getGooglePhotoWithReference(photoReference) {
+  return axios.get('https://maps.googleapis.com/maps/api/place/photo', {
+    params: {
+      key: process.env.GOOGLE_API_KEY,
+      photoreference: photoReference,
+      maxHeight: 1600,
+      maxWidth: 1600,
+    },
+  });
+}
+
+// Additional endpoint for google photos not required for initial load
+app.get('/photos/google', async (req, res) => {
+  const { photoReferences } = req.query;
+  try {
+    let photoRequests = [];
+    for (var photoReference of photoReferences) {
+      photoRequests.push(getGooglePhotoWithReference(photoReference));
+    }
+
+    const photoResponses = await Promise.all(photoRequests);
+    const photoResponseData = photoResponses.map((res) => res.data);
+    res.json(photoResponseData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ reason: 'GooglePhotosFailed' });
+  }
+});
+
 // !! MAIN ENDPOINT
 app.get('/restaurant', async (req, res) => {
   const { restaurantName, latitude, longitude } = req.query;
