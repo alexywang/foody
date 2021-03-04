@@ -10,8 +10,35 @@ const THUMBNAIL_WIDTH = 135;
 const GALLERY_MAX_ROWS = 3;
 const GALLERY_MAX_COLS = 5;
 
-export function Pictures({ yelpPhotos, source, googlePhotos }) {
-  if (!yelpPhotos) return null;
+export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
+  const [googlePhotos, setGooglePhotos] = useState();
+
+  useEffect(() => {
+    setGooglePhotos(generateGooglePhotos(googlePlaceDetails));
+  }, [googlePlaceDetails]);
+
+  function getPhotoUrlWithReference(googlePhotoReference, maxwidth, maxheight) {
+    const url = new URL('https://maps.googleapis.com/maps/api/place/photo');
+    url.searchParams.append('photoreference', googlePhotoReference);
+    url.searchParams.append('key', process.env.REACT_APP_GOOGLE_API_KEY);
+    url.searchParams.append('maxwidth', maxwidth);
+    url.searchParams.append('maxheight', maxheight);
+    return url.toString();
+  }
+
+  function generateGooglePhotos(googlePlaceDetails) {
+    if (!googlePlaceDetails?.result?.photos) return null;
+    return googlePlaceDetails.result.photos.map((photo) => {
+      return {
+        original: getPhotoUrlWithReference(photo.photo_reference, 1000, 1000),
+        thumbnail: getPhotoUrlWithReference(
+          photo.photo_reference,
+          THUMBNAIL_WIDTH + 100,
+          THUMBNAIL_HEIGHT + 100
+        ),
+      };
+    });
+  }
 
   function getPhotosForSource() {
     if (source === 'Yelp') {
@@ -69,8 +96,11 @@ function FoodyGalleryThumbnail({ photo, onClick }) {
       onClick={() => onClick(photo)}
       className="foody-gallery-thumbnail grow-on-hover"
       src={photo.thumbnail}
-      max-={THUMBNAIL_WIDTH}
+      width={THUMBNAIL_WIDTH}
       height={THUMBNAIL_HEIGHT}
+      style={{
+        objectFit: 'cover',
+      }}
     />
   );
 }

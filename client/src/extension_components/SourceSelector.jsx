@@ -2,7 +2,7 @@ import './SourceSelector.css';
 const LOGO_PATH = '/logos/';
 
 const LOGO_SIZE = 30;
-export function SourceSelector({ setSource, source, onGoogleClick }) {
+export function SourceSelector({ setSource, source }) {
   const SOURCE_NAMES = ['Yelp', 'Google'];
 
   function getSourceLogo(sourceName) {
@@ -24,7 +24,6 @@ export function SourceSelector({ setSource, source, onGoogleClick }) {
             className={className}
             onClick={() => {
               setSource(sourceName);
-              if (sourceName === 'Google') onGoogleClick();
             }}
             src={getSourceLogo(sourceName)}
             width={LOGO_SIZE}

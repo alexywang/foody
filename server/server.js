@@ -4,7 +4,10 @@ const { performance } = require('perf_hooks');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
+const fetch = require('node-fetch');
 const { getYelpPhotos, parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
+const request = require('https').request;
+const proxy = require('express-http-proxy');
 
 const PORT = process.env.PORT || 4000;
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
@@ -79,6 +82,12 @@ function getGooglePhotoWithReference(photoReference) {
   });
 }
 
+function fetchGooglePhotoWithReference(photoReference) {
+  return fetch(
+    `https://maps.googleapis.com/maps/api/place/photo?photoreference${photoReference}&maxwidth=1000&maxheight=1000&key=${process.env.GOOGLE_API_KEY}`
+  );
+}
+
 // Additional endpoint for google photos not required for initial load
 app.get('/photos/google', async (req, res) => {
   const { photoReferences } = req.query;
@@ -89,9 +98,8 @@ app.get('/photos/google', async (req, res) => {
     }
 
     const photoResponses = await Promise.all(photoRequests);
-    console.log(photoResponses[0]);
     const photoResponseData = photoResponses.map((res) => res.data);
-    res.json(photoResponseData);
+    res.send(photoResponseData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ reason: 'GooglePhotosFailed' });
