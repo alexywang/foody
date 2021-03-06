@@ -7,9 +7,6 @@ axios.defaults.baseURL = SERVER_URL;
 const THUMBNAIL_HEIGHT = 135;
 const THUMBNAIL_WIDTH = 135;
 
-const GALLERY_MAX_ROWS = 3;
-const GALLERY_MAX_COLS = 5;
-
 export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
   const [googlePhotos, setGooglePhotos] = useState();
 
@@ -31,11 +28,7 @@ export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
     return googlePlaceDetails.result.photos.map((photo) => {
       return {
         original: getPhotoUrlWithReference(photo.photo_reference, 1000, 1000),
-        thumbnail: getPhotoUrlWithReference(
-          photo.photo_reference,
-          THUMBNAIL_WIDTH + 100,
-          THUMBNAIL_HEIGHT + 100
-        ),
+        thumbnail: getPhotoUrlWithReference(photo.photo_reference, 600, 600),
       };
     });
   }
@@ -57,7 +50,23 @@ export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
 }
 
 function FoodyGallery({ photos }) {
+  const GALLERY_MAX_ROWS = 3;
+  const GALLERY_MAX_COLS = 2;
+  const photosPerPage = GALLERY_MAX_COLS * GALLERY_MAX_ROWS;
+
   const [selectedPhoto, setSelectedPhoto] = useState();
+  const [currPage, setCurrPage] = useState(1);
+
+  function getNumPages() {
+    return Math.ceil(photos.length / photosPerPage);
+  }
+
+  function getCurrPage(pageNum) {
+    if (!photos) return [];
+    const startIndex = photosPerPage * (currPage - 1);
+    const endIndex = startIndex + photosPerPage;
+    return photos.slice(startIndex, endIndex);
+  }
 
   function onThumbnailClicked(photo) {
     setSelectedPhoto(photo);
@@ -72,7 +81,7 @@ function FoodyGallery({ photos }) {
 
   return (
     <div className="foody-gallery">
-      {photos.map((photo, id) => {
+      {getCurrPage().map((photo, id) => {
         return <FoodyGalleryThumbnail onClick={onThumbnailClicked} key={id} photo={photo} />;
       })}
       <FoodyGalleryOverlay onClick={onOverlayClicked} photo={selectedPhoto} />
@@ -96,11 +105,6 @@ function FoodyGalleryThumbnail({ photo, onClick }) {
       onClick={() => onClick(photo)}
       className="foody-gallery-thumbnail grow-on-hover"
       src={photo.thumbnail}
-      width={THUMBNAIL_WIDTH}
-      height={THUMBNAIL_HEIGHT}
-      style={{
-        objectFit: 'cover',
-      }}
     />
   );
 }

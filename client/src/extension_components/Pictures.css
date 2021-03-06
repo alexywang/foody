@@ -7,6 +7,9 @@
   border-radius: 10px;
   vertical-align: bottom;
   cursor: pointer;
+  width: 33%;
+  object-fit: cover;
+  aspect-ratio: 1;
 }
 
 .foody-gallery-fullsize {
