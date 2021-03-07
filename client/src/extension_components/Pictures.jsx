@@ -50,7 +50,7 @@ export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
 }
 
 function FoodyGallery({ photos }) {
-  const GALLERY_MAX_ROWS = 3;
+  const GALLERY_MAX_ROWS = 4;
   const GALLERY_MAX_COLS = 2;
   const photosPerPage = GALLERY_MAX_COLS * GALLERY_MAX_ROWS;
 
@@ -58,14 +58,23 @@ function FoodyGallery({ photos }) {
   const [currPage, setCurrPage] = useState(1);
 
   function getNumPages() {
+    console.log(photos.length);
     return Math.ceil(photos.length / photosPerPage);
   }
 
-  function getCurrPage(pageNum) {
+  function getCurrPage() {
     if (!photos) return [];
     const startIndex = photosPerPage * (currPage - 1);
     const endIndex = startIndex + photosPerPage;
     return photos.slice(startIndex, endIndex);
+  }
+
+  function nextPage() {
+    setCurrPage((currPage % (getNumPages + 1)) + 1);
+  }
+
+  function prevPage() {
+    setCurrPage((currPage % (getNumPages + 1)) - 1);
   }
 
   function onThumbnailClicked(photo) {
@@ -81,10 +90,18 @@ function FoodyGallery({ photos }) {
 
   return (
     <div className="foody-gallery">
-      {getCurrPage().map((photo, id) => {
-        return <FoodyGalleryThumbnail onClick={onThumbnailClicked} key={id} photo={photo} />;
-      })}
-      <FoodyGalleryOverlay onClick={onOverlayClicked} photo={selectedPhoto} />
+      <div>
+        {getCurrPage().map((photo, id) => {
+          return <FoodyGalleryThumbnail onClick={onThumbnailClicked} key={id} photo={photo} />;
+        })}
+        <FoodyGalleryOverlay onClick={onOverlayClicked} photo={selectedPhoto} />
+      </div>
+
+      <div className="foody-gallery-navigator">
+        <p>
+          Page {currPage}/{getNumPages()}
+        </p>
+      </div>
     </div>
   );
 }

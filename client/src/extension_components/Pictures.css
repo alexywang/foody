@@ -1,13 +1,13 @@
 .foody-gallery {
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex;
+  flex-wrap: wrap; */
 }
 .foody-gallery-thumbnail {
   padding: 5px;
   border-radius: 10px;
   vertical-align: bottom;
   cursor: pointer;
-  width: 33%;
+  width: 25%;
   object-fit: cover;
   aspect-ratio: 1;
 }
@@ -21,6 +21,17 @@
   transform: translate(-50%, -50%);
   max-width: 100%;
   max-height: 100%;
+}
+
+.foody-gallery-navigator {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.foody-gallery-navigator p {
+  font-size: 1.2em;
+  padding: 20px;
 }
 
 .overlay {
