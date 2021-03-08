@@ -70,11 +70,11 @@ function FoodyGallery({ photos }) {
   }
 
   function nextPage() {
-    setCurrPage((currPage % (getNumPages + 1)) + 1);
+    setCurrPage(Math.min(currPage + 1, getNumPages()));
   }
 
   function prevPage() {
-    setCurrPage((currPage % (getNumPages + 1)) - 1);
+    setCurrPage(Math.max(currPage - 1, 1));
   }
 
   function onThumbnailClicked(photo) {
@@ -90,17 +90,20 @@ function FoodyGallery({ photos }) {
 
   return (
     <div className="foody-gallery">
-      <div>
-        {getCurrPage().map((photo, id) => {
-          return <FoodyGalleryThumbnail onClick={onThumbnailClicked} key={id} photo={photo} />;
-        })}
-        <FoodyGalleryOverlay onClick={onOverlayClicked} photo={selectedPhoto} />
+      <div className="foody-gallery-display">
+        <div>
+          {getCurrPage().map((photo, id) => {
+            return <FoodyGalleryThumbnail onClick={onThumbnailClicked} key={id} photo={photo} />;
+          })}
+          <FoodyGalleryOverlay onClick={onOverlayClicked} photo={selectedPhoto} />
+        </div>
       </div>
-
       <div className="foody-gallery-navigator">
+        <img onClick={prevPage} className="reflect-horizontally" src={'/ui/arrow-right.svg'} />
         <p>
           Page {currPage}/{getNumPages()}
         </p>
+        <img onClick={nextPage} src={'/ui/arrow-right.svg'} />
       </div>
     </div>
   );

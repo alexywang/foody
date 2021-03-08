@@ -2,6 +2,12 @@
   /* display: flex;
   flex-wrap: wrap; */
 }
+
+.foody-gallery-display {
+  width: 100%;
+  aspect-ratio: 2;
+}
+
 .foody-gallery-thumbnail {
   padding: 5px;
   border-radius: 10px;
@@ -25,13 +31,19 @@
 
 .foody-gallery-navigator {
   display: flex;
-  align-content: center;
   justify-content: center;
+  align-items: center;
 }
 
 .foody-gallery-navigator p {
   font-size: 1.2em;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 15px;
+}
+
+.foody-gallery-navigator img {
+  cursor: pointer;
 }
 
 .overlay {
@@ -46,4 +58,9 @@
   background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
+}
+
+.reflect-horizontally {
+  -webkit-transform: scale(-1);
+  transform: scaleX(-1);
 }
