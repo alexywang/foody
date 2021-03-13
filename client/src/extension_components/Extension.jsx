@@ -3,6 +3,7 @@ import { SERVER_URL } from '../constants.js';
 import { Infobar } from './Infobar';
 import { Pictures } from './Pictures';
 import { SourceSelector } from './SourceSelector';
+import { OpenTable } from './OpenTable';
 import './Extension.css';
 const axios = require('axios').default;
 axios.defaults.baseURL = SERVER_URL;
@@ -20,6 +21,7 @@ export function Extension() {
   const [googlePlaceSearchData, setGooglePlaceSearchData] = useState();
   const [googleDistanceMatrixData, setGoogleDistanceMatrixData] = useState();
   const [googlePlaceDetailsData, setGooglePlaceDetailsData] = useState();
+  const [openTableLink, setOpenTableLink] = useState();
   const [yelpPhotos, setYelpPhotos] = useState();
   const [source, setSource] = useState('Yelp');
 
@@ -30,6 +32,8 @@ export function Extension() {
         restaurantName,
         latitude: locationData.ll[0],
         longitude: locationData.ll[1],
+        country: locationData.country,
+        city: locationData.city,
       },
     });
 
@@ -40,6 +44,7 @@ export function Extension() {
     setGoogleDistanceMatrixData(response.data.googleDistanceMatrixData);
     setGooglePlaceDetailsData(response.data.googlePlaceDetailsData);
     setYelpPhotos(response.data.yelpPhotos);
+    setOpenTableLink(response.data.openTableLink);
     return response.data;
   }
 
@@ -70,6 +75,9 @@ export function Extension() {
           source={source}
           googlePlaceDetails={googlePlaceDetailsData}
         />
+      </div>
+      <div className="right-section">
+        <OpenTable openTableLink={openTableLink} />
       </div>
     </div>
   );

@@ -82,10 +82,20 @@ function getGooglePhotoWithReference(photoReference) {
   });
 }
 
-function fetchGooglePhotoWithReference(photoReference) {
-  return fetch(
-    `https://maps.googleapis.com/maps/api/place/photo?photoreference${photoReference}&maxwidth=1000&maxheight=1000&key=${process.env.GOOGLE_API_KEY}`
+// OPEN TABLE
+function scrapeOpenTableLinkFromGoogle(restaurantName, country, city) {
+  return axios.get('https://google.com/search', {
+    params: {
+      q: `${restaurantName} restaurant ${city}, ${country} OpenTable`,
+    },
+  });
+}
+
+function parseOpenTableLinkFromGoogleHtml(rawHtml) {
+  let openTableLink = rawHtml.match(
+    /https:\/\/www.opentable.[a-z]*\/restaurant\/profile\/[0-9]*/gim
   );
+  return openTableLink ? openTableLink[0] : null;
 }
 
 // Additional endpoint for google photos not required for initial load
@@ -108,20 +118,23 @@ app.get('/photos/google', async (req, res) => {
 
 // !! MAIN ENDPOINT
 app.get('/restaurant', async (req, res) => {
-  const { restaurantName, latitude, longitude } = req.query;
+  const { restaurantName, latitude, longitude, country, city } = req.query;
   const startTime = performance.now();
 
   // Step 1: Yelp Business Search and Google Places Search
   let yelpBusinessSearchData;
   let googlePlaceSearchData;
+  let openTableLink;
   try {
     let promises = [];
     promises.push(getYelpBusinessSearchData(restaurantName, latitude, longitude));
     promises.push(getGooglePlaceSearchData(restaurantName, latitude, longitude));
+    promises.push(scrapeOpenTableLinkFromGoogle(restaurantName, country, city));
 
     let responses = await Promise.all(promises);
     yelpBusinessSearchData = responses[0].data;
     googlePlaceSearchData = responses[1].data;
+    openTableLink = parseOpenTableLinkFromGoogleHtml(responses[2].data);
   } catch (err) {
     console.error(err);
     res.status(500).json({ reason: 'RestaurantSearchFailed' });
@@ -188,6 +201,7 @@ app.get('/restaurant', async (req, res) => {
     googleDistanceMatrixData,
     googlePlaceDetailsData,
     yelpPhotos,
+    openTableLink,
   });
 });
 

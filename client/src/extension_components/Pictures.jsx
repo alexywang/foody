@@ -57,6 +57,10 @@ function FoodyGallery({ photos }) {
   const [selectedPhoto, setSelectedPhoto] = useState();
   const [currPage, setCurrPage] = useState(1);
 
+  useEffect(() => {
+    setCurrPage(1);
+  }, [photos]);
+
   function getNumPages() {
     console.log(photos.length);
     return Math.ceil(photos.length / photosPerPage);
