@@ -3,7 +3,7 @@ import { SERVER_URL } from '../constants.js';
 import { Infobar } from './Infobar';
 import { Pictures } from './Pictures';
 import { SourceSelector } from './SourceSelector';
-import { OpenTable } from './OpenTable';
+import { FoodyOpenTable } from './OpenTable';
 import './Extension.css';
 const axios = require('axios').default;
 axios.defaults.baseURL = SERVER_URL;
@@ -58,7 +58,7 @@ export function Extension() {
   }, []);
 
   return (
-    <div>
+    <div className="extension-container">
       <div className="left-section">
         <div className="topbar">
           <h1 className="restaurant-title">{googlePlaceSearchData?.name}</h1>
@@ -77,7 +77,7 @@ export function Extension() {
         />
       </div>
       <div className="right-section">
-        <OpenTable openTableLink={openTableLink} />
+        <FoodyOpenTable openTableLink={openTableLink} />
       </div>
     </div>
   );

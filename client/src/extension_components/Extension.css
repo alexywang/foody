@@ -7,6 +7,24 @@
   font-weight: 150;
   display: inline-block;
 }
-.right-section {
+/* .right-section {
   width: 40%;
+} */
+
+.extension-container {
+  display: flex;
 }
+/* .custom-ot-wrapper {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid rgb(218, 55, 67);
+  box-shadow: 10px 10px rgba(218, 55, 67, 0.6);
+  transition: 0.4s box-shadow ease-in-out;
+}
+
+.custom-ot-wrapper:hover,
+.custom-ot-wrapper:focus,
+.custom-ot-wrapper:target {
+  box-shadow: -10px 10px rgba(218, 55, 67, 0.8);
+} */
