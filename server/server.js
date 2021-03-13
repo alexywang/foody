@@ -92,10 +92,29 @@ function scrapeOpenTableLinkFromGoogle(restaurantName, country, city) {
 }
 
 function parseOpenTableLinkFromGoogleHtml(rawHtml) {
-  let openTableLink = rawHtml.match(
-    /https:\/\/www.opentable.[a-z]*\/restaurant\/profile\/[0-9]*/gim
-  );
-  return openTableLink ? openTableLink[0] : null;
+  let openTableLink = rawHtml.match(/[a-z]+.opentable.[a-z\/]+\/[a-z\/-]+/gim);
+  return openTableLink ? 'https://' + openTableLink[0] : null;
+}
+
+function openTableLinkContainsRid(link) {
+  return link.match(/[0-9]+/gm);
+}
+
+function scrapeOpenTableRestaurantPage(openTableLink) {
+  return axios.get(openTableLink);
+}
+
+function parseRidFromOpenTableHtml(rawHtml) {
+  let ridTag = rawHtml.match(/rid=[0-9]*/gm);
+  if (!ridTag) {
+    return null;
+  } else {
+    return ridTag[0].split('=')[1];
+  }
+}
+
+function generateOpenTableLinkWithRid(rid) {
+  return `https://opentable.com/restaurant/profile/${rid}`;
 }
 
 // Additional endpoint for google photos not required for initial load
@@ -177,6 +196,11 @@ app.get('/restaurant', async (req, res) => {
     promises.push(getGooglePlaceDetails(googlePlaceSearchTopResult.place_id));
     promises.push(yelpPhotosRequest(yelpBusinessSearchTopResult.url));
 
+    // If the open table link is null, then we need to
+    if (!openTableLinkContainsRid(openTableLink)) {
+      promises.push(scrapeOpenTableRestaurantPage(openTableLink));
+    }
+
     const responses = await Promise.all(promises);
     const googleDistanceMatrixResponses = responses.splice(0, travelModes.length);
 
@@ -187,6 +211,10 @@ app.get('/restaurant', async (req, res) => {
 
     googlePlaceDetailsData = responses[0].data;
     yelpPhotos = parseYelpPhotosRequest(responses[1].data);
+
+    if (!openTableLinkContainsRid(openTableLink)) {
+      openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ reason: 'AdvancedGoogleDataFailed' });
