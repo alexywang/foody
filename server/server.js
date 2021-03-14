@@ -92,7 +92,7 @@ function scrapeOpenTableLinkFromGoogle(restaurantName, country, city) {
 }
 
 function parseOpenTableLinkFromGoogleHtml(rawHtml) {
-  let openTableLink = rawHtml.match(/[a-z]+.opentable.[a-z\/]+\/[a-z\/-]+/gim);
+  let openTableLink = rawHtml.match(/[a-z]+.opentable.[a-z0-9\/]+\/[a-z0-9\/-]+/gim);
   return openTableLink ? 'https://' + openTableLink[0] : null;
 }
 
@@ -197,7 +197,7 @@ app.get('/restaurant', async (req, res) => {
     promises.push(yelpPhotosRequest(yelpBusinessSearchTopResult.url));
 
     // If the open table link is null, then we need to
-    if (!openTableLinkContainsRid(openTableLink)) {
+    if (openTableLinkContainsRid(openTableLink) == null) {
       promises.push(scrapeOpenTableRestaurantPage(openTableLink));
     }
 
@@ -212,7 +212,7 @@ app.get('/restaurant', async (req, res) => {
     googlePlaceDetailsData = responses[0].data;
     yelpPhotos = parseYelpPhotosRequest(responses[1].data);
 
-    if (!openTableLinkContainsRid(openTableLink)) {
+    if (openTableLinkContainsRid(openTableLink) == null) {
       openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
     }
   } catch (err) {
