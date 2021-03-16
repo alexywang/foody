@@ -1,12 +1,12 @@
 .infobar-flex-container {
-  display: flex;
+  /* display: flex;
   flex-direction: row;
   align-items: baseline;
   align-content: space-between;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
 
 .infobar-section {
-  margin-right: 10px;
-  display: inline;
+  display: inline-block;
+  margin-right: 8%;
 }
