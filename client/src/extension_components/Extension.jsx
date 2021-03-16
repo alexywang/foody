@@ -25,18 +25,24 @@ export function Extension() {
   const [yelpPhotos, setYelpPhotos] = useState();
   const [source, setSource] = useState('Yelp');
 
+  const [error, setError] = useState(null);
+
   async function fetchRestaurantData(restaurantName) {
     const locationData = (await axios.get('https://geo.risk3sixty.com/me')).data;
-    const response = await axios.get('/restaurant', {
-      params: {
-        restaurantName,
-        latitude: locationData.ll[0],
-        longitude: locationData.ll[1],
-        country: locationData.country,
-        city: locationData.city,
-      },
-    });
-
+    let response;
+    try {
+      response = await axios.get('/restaurant', {
+        params: {
+          restaurantName,
+          latitude: locationData.ll[0],
+          longitude: locationData.ll[1],
+          country: locationData.country,
+          city: locationData.city,
+        },
+      });
+    } catch (err) {
+      setError(err);
+    }
     console.log(response.data);
 
     setYelpBusinessSearchData(response.data.yelpBusinessSearchData);
@@ -56,6 +62,23 @@ export function Extension() {
     setRestaurantName(restaurantName);
     fetchRestaurantData(restaurantName);
   }, []);
+
+  // If no error detected and some fields are null, we are loading
+  if (
+    !error &&
+    (!yelpBusinessSearchData ||
+      !googlePlaceSearchData ||
+      !googleDistanceMatrixData ||
+      !googlePlaceDetailsData ||
+      !openTableLink ||
+      !yelpPhotos)
+  ) {
+    return (
+      <div className="loading">
+        <div class="spinner-border text-success loading" role="status"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="extension-container">

@@ -17,3 +17,10 @@
 .extension-container {
   display: flex;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12%;
+}
