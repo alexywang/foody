@@ -51,10 +51,9 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
           <span
             className="travel-mode"
             onClick={() => setActiveTravelMode((activeTravelMode + 1) % TRAVEL_MODES.length)}
-            style={{ paddingBottom: '10' }}
           >
-            <img src={getTravelModeIcon()} /> Approx. {getTravelTime()} min{' '}
-            {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
+            <img style={{ height: '1.5vw' }} src={getTravelModeIcon()} /> Approx. {getTravelTime()}{' '}
+            min {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
           </span>
           <br />
           <a href={googlePlacesRestaurant?.result?.url}>
