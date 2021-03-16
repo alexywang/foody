@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import OpenTable, { positions } from 'react-opentable';
 // import 'react-opentable/dist/index.css';
 import './OpenTable.css';
 
 export function FoodyOpenTable({ openTableLink }) {
+  const [openTableTheme, setOpenTableTheme] = useState('tall');
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (getWindowWidth() < 500 && openTableTheme != 'standard') {
+        setOpenTableTheme('standard');
+      } else {
+        if (openTableTheme != 'tall') setOpenTableTheme('tall');
+      }
+    });
+  }, []);
+
+  function getWindowWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  }
+
   function getOpenTableWidgetLink(openTableLink) {
     const numerics = openTableLink.match(/[0-9]+/gm);
     if (!numerics) return null;
@@ -25,7 +41,7 @@ export function FoodyOpenTable({ openTableLink }) {
       customClassName="custom-ot-wrapper"
       position={positions.POSITION_UNSET}
       iframe={true}
-      theme="tall"
+      theme={openTableTheme}
     />
   );
 }
