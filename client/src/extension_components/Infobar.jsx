@@ -3,7 +3,8 @@ import './Infobar.css';
 import { Rating } from './Rating';
 
 export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestaurant, source }) {
-  const TRAVEL_MODES = ['walking', 'driving', 'bicycling', 'tranist'];
+  const TRAVEL_MODE_ASSET_FOLDER = '/travel_mode_assets';
+  const TRAVEL_MODES = ['walking', 'driving', 'bicycling', 'transit'];
   const TRAVEL_MODE_LANGUAGE = ['walk', 'drive', 'bike ride', 'transit'];
   const [activeTravelMode, setActiveTravelMode] = useState(0);
 
@@ -15,6 +16,10 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
       return ['(', match[2], ') ', match[3], '-', match[4]].join('');
     }
     return null;
+  }
+
+  function getTravelModeIcon() {
+    return `${TRAVEL_MODE_ASSET_FOLDER}/${TRAVEL_MODES[activeTravelMode]}.png`;
   }
 
   function getTravelTime() {
@@ -43,9 +48,17 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
           />
         </div>
         <div id="infobar-section-distance" className="infobar-section">
-          Approx. {getTravelTime()} min {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
+          <span
+            className="travel-mode"
+            onClick={() => setActiveTravelMode((activeTravelMode + 1) % TRAVEL_MODES.length)}
+          >
+            <img src={getTravelModeIcon()} /> Approx. {getTravelTime()} min{' '}
+            {TRAVEL_MODE_LANGUAGE[activeTravelMode]} away.
+          </span>
           <br />
-          {yelpRestaurant?.location.address1 + ', ' + yelpRestaurant?.location.city}
+          <a href={googlePlacesRestaurant?.result?.url}>
+            {yelpRestaurant?.location.address1 + ', ' + yelpRestaurant?.location.city}
+          </a>
         </div>
       </div>
     </div>

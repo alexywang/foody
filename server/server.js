@@ -66,7 +66,7 @@ function getGooglePlaceDetails(googlePlaceId) {
     params: {
       key: process.env.GOOGLE_API_KEY,
       place_id: googlePlaceId,
-      fields: 'website,photo',
+      fields: 'website,photo,url',
     },
   });
 }
