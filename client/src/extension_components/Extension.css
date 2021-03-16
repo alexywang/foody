@@ -1,14 +1,17 @@
 .left-section {
-  width: 60%;
+  width: 75%;
 }
 .restaurant-title {
   color: rgba(70, 210, 160);
   font-size: 3em;
   font-weight: 150;
   display: inline-block;
+  justify-content: space-around;
 }
 .right-section {
-  width: 40%;
+  width: 20%;
+  padding-top: 5%;
+  padding-left: 2.5%;
 }
 
 .extension-container {

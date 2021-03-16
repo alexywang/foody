@@ -5,7 +5,7 @@
 
 .foody-gallery-display {
   width: 100%;
-  aspect-ratio: 2;
+  aspect-ratio: 3;
 }
 
 .foody-gallery-thumbnail {
@@ -13,7 +13,7 @@
   border-radius: 10px;
   vertical-align: bottom;
   cursor: pointer;
-  width: 25%;
+  width: 20%;
   object-fit: cover;
   aspect-ratio: 1;
 }

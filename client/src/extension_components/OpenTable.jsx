@@ -20,14 +20,12 @@ export function FoodyOpenTable({ openTableLink }) {
   if (!openTableLink) return null;
 
   return (
-    <div className="open-table-container">
-      <OpenTable
-        rid={getOpenTableRid(openTableLink)}
-        customClassName="custom-ot-wrapper"
-        position={positions.POSITION_UNSET}
-        iframe={true}
-        theme="tall"
-      />
-    </div>
+    <OpenTable
+      rid={getOpenTableRid(openTableLink)}
+      customClassName="custom-ot-wrapper"
+      position={positions.POSITION_UNSET}
+      iframe={true}
+      theme="tall"
+    />
   );
 }
