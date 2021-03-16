@@ -4,9 +4,6 @@ import axios from 'axios';
 import './Pictures.css';
 axios.defaults.baseURL = SERVER_URL;
 
-const THUMBNAIL_HEIGHT = 135;
-const THUMBNAIL_WIDTH = 135;
-
 export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
   const [googlePhotos, setGooglePhotos] = useState();
 
@@ -50,7 +47,7 @@ export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
 }
 
 function FoodyGallery({ photos }) {
-  const GALLERY_MAX_ROWS = 4;
+  const GALLERY_MAX_ROWS = 8;
   const GALLERY_MAX_COLS = 2;
   const photosPerPage = GALLERY_MAX_COLS * GALLERY_MAX_ROWS;
 

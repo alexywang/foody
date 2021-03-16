@@ -26,7 +26,7 @@ export function FoodyOpenTable({ openTableLink }) {
         customClassName="custom-ot-wrapper"
         position={positions.POSITION_UNSET}
         iframe={true}
-        theme="tall"
+        theme="wide"
       />
     </div>
   );

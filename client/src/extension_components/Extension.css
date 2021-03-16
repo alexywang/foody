@@ -1,5 +1,5 @@
 .left-section {
-  width: 60%;
+  width: 100%;
 }
 .restaurant-title {
   color: rgba(70, 210, 160);
@@ -7,10 +7,10 @@
   font-weight: 150;
   display: inline-block;
 }
-.right-section {
-  width: 40%;
-}
 
 .extension-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

@@ -3,7 +3,7 @@
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1000; /* Sit on top */
-  padding-top: 50px; /* Location of the box */
+  padding-top: 25px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -21,7 +21,7 @@
   padding: 10px;
   /* border: 1px solid #888; */
   border-radius: 10px;
-  height: 80%;
+  height: 90%;
   width: 80%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;

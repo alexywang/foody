@@ -1,11 +1,6 @@
-.foody-gallery {
-  /* display: flex;
-  flex-wrap: wrap; */
-}
-
 .foody-gallery-display {
   width: 100%;
-  aspect-ratio: 2;
+  aspect-ratio: 5;
 }
 
 .foody-gallery-thumbnail {
@@ -13,7 +8,7 @@
   border-radius: 10px;
   vertical-align: bottom;
   cursor: pointer;
-  width: 25%;
+  width: 12%;
   object-fit: cover;
   aspect-ratio: 1;
 }
