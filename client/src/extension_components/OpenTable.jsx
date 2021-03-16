@@ -7,14 +7,20 @@ export function FoodyOpenTable({ openTableLink }) {
   const [openTableTheme, setOpenTableTheme] = useState('tall');
 
   useEffect(() => {
+    setOpenTableTheme(determineWidgetTheme());
     window.addEventListener('resize', () => {
-      if (getWindowWidth() < 500 && openTableTheme != 'standard') {
-        setOpenTableTheme('standard');
-      } else {
-        if (openTableTheme != 'tall') setOpenTableTheme('tall');
-      }
+      setOpenTableTheme(determineWidgetTheme());
     });
   }, []);
+
+  function determineWidgetTheme() {
+    console.log(getWindowWidth());
+    if (getWindowWidth() < 1200) {
+      return 'standard';
+    } else {
+      return 'tall';
+    }
+  }
 
   function getWindowWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -36,12 +42,14 @@ export function FoodyOpenTable({ openTableLink }) {
   if (!openTableLink) return null;
 
   return (
-    <OpenTable
-      rid={getOpenTableRid(openTableLink)}
-      customClassName="custom-ot-wrapper"
-      position={positions.POSITION_UNSET}
-      iframe={true}
-      theme={openTableTheme}
-    />
+    <div>
+      <OpenTable
+        rid={getOpenTableRid(openTableLink)}
+        customClassName="custom-ot-wrapper"
+        position={positions.POSITION_UNSET}
+        iframe={true}
+        theme={openTableTheme}
+      />
+    </div>
   );
 }
