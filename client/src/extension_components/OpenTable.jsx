@@ -39,7 +39,15 @@ export function FoodyOpenTable({ openTableLink }) {
     return numbers[0];
   }
 
-  if (!openTableLink) return null;
+  if (!openTableLink || getOpenTableRid(openTableLink) == null) {
+    return (
+      <div style={{ marginTop: '75%', color: 'rgb(247, 195, 190)' }}>
+        <p>
+          <center>We couldn't find the restaurant on Open Table :(</center>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -43,7 +43,6 @@ export function Extension() {
     } catch (err) {
       setError(err);
     }
-    console.log(response.data);
 
     setYelpBusinessSearchData(response.data.yelpBusinessSearchData);
     setGooglePlaceSearchData(response.data.googlePlaceSearchData);
