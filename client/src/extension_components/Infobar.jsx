@@ -28,7 +28,6 @@ export function Infobar({ yelpRestaurant, googleDistanceData, googlePlacesRestau
     return Number.parseInt(googleDistanceData[TRAVEL_MODES[activeTravelMode]].duration.text);
   }
 
-  console.log(googlePlacesRestaurant);
   return (
     <div className="infobar">
       <div className="infobar-flex-container">

@@ -17,7 +17,6 @@ export function SourceSelector({ setSource, source }) {
     <span className="source-selector-container">
       {SOURCE_NAMES.map((sourceName, id) => {
         const className = sourceName === source ? '' : 'grayscale';
-        console.log(sourceName + ' ' + source);
         return (
           <img
             key={sourceName}

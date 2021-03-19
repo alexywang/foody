@@ -14,7 +14,6 @@ export function FoodyOpenTable({ openTableLink }) {
   }, []);
 
   function determineWidgetTheme() {
-    console.log(getWindowWidth());
     if (getWindowWidth() < 1200) {
       return 'standard';
     } else {

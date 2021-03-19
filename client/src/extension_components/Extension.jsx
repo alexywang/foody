@@ -41,7 +41,7 @@ export function Extension() {
         },
       });
     } catch (err) {
-      setError(err);
+      setError(err.response.data);
     }
 
     setYelpBusinessSearchData(response.data.yelpBusinessSearchData);

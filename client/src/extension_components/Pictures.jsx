@@ -59,7 +59,6 @@ function FoodyGallery({ photos }) {
   }, [photos]);
 
   function getNumPages() {
-    console.log(photos.length);
     return Math.ceil(photos.length / photosPerPage);
   }
 
