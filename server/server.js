@@ -153,7 +153,14 @@ app.get('/restaurant', async (req, res) => {
     let responses = await Promise.all(promises);
     yelpBusinessSearchData = responses[0].data;
     googlePlaceSearchData = responses[1].data;
-    openTableLink = parseOpenTableLinkFromGoogleHtml(responses[2].data);
+    try {
+      openTableLink = parseOpenTableLinkFromGoogleHtml(responses[2].data);
+    } catch (err) {
+      console.err(err);
+      // TODO: Internally log this so I know when this algorithm could be outdated.
+      res.status(500).json({ reason: 'OpenTableLinkParseFailed' });
+      return;
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ reason: 'RestaurantSearchFailed' });
@@ -167,13 +174,16 @@ app.get('/restaurant', async (req, res) => {
     yelpBusinessSearchTopResult = yelpBusinessSearchData.businesses[0];
   } catch (err) {
     console.error(err);
+    // TODO: Internally log this so I know when this algorithm could be outdated.
     res.status(500).json({ reason: 'YelpBusinessSearchResultParseFailed' });
     return;
   }
+
   try {
     googlePlaceSearchTopResult = googlePlaceSearchData.candidates[0];
   } catch (err) {
     console.error(err);
+    // TODO: Internally log this so I know when this algorithm could be outdated.
     res.status(500).json({ reason: 'GooglePlaceSearchResultParseFailed' });
     return;
   }
@@ -212,12 +222,34 @@ app.get('/restaurant', async (req, res) => {
     googlePlaceDetailsData = responses[0].data;
     yelpPhotos = parseYelpPhotosRequest(responses[1].data);
 
-    if (openTableLinkContainsRid(openTableLink) == null) {
-      openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
+    try {
+      if (openTableLinkContainsRid(openTableLink) == null) {
+        openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
+      }
+    } catch (err) {
+      console.error(err);
+      // TODO: Log internally somewhere to know when algorithm might be out of date.
+      res.status(500).json({
+        reason: 'ParseOpenTableRidFailed',
+        yelpBusinessSearchData: yelpBusinessSearchData,
+        googlePlaceSearchData: googlePlaceSearchTopResult,
+        googleDistanceMatrixData,
+        googlePlaceDetailsData,
+        yelpPhotos,
+        openTableLink,
+      });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ reason: 'AdvancedGoogleDataFailed' });
+    res.status(500).json({
+      reason: 'AdvancedGoogleDataOrYelpPhotoScrapeFailed',
+      yelpBusinessSearchData: yelpBusinessSearchData,
+      googlePlaceSearchData: googlePlaceSearchTopResult,
+      googleDistanceMatrixData,
+      googlePlaceDetailsData,
+      yelpPhotos,
+      openTableLink,
+    });
     return;
   }
 
