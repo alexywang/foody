@@ -16,6 +16,7 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "content_security_policy": "script-src 'self' https://example.com; object-src 'self'",
   "permissions": ["contextMenus", "tabs"],
   "icons": {
     "48": "icon.png"

@@ -11,3 +11,8 @@ h1 {
   color: rgba(70, 210, 160);
   font-weight: 150;
 }
+
+.btn-outline-success {
+  color: rgba(70, 210, 160);
+  border-color: rgba(70, 210, 160);
+}

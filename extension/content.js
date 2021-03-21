@@ -9,7 +9,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   if (request.message === 'clicked_context_menu') {
     // Click context menu item Show {restaurant} on Foody
-    showOnFoody(request.content);
+    const restaurantName = request.content.info.selectionText;
+    showOnFoody(restaurantName);
+  }
+  if (request.message === 'search_from_popup') {
+    const restaurantName = request.content;
+    showOnFoody(restaurantName);
   }
 });
 
@@ -23,11 +28,7 @@ function removeModal() {
   modal.remove();
 }
 
-function showOnFoody(content) {
-  console.log(content);
-  console.log('Foody context menu clicked for ' + content.info.selectionText);
-
-  const restaurant = content.info.selectionText;
+function showOnFoody(restaurant) {
   const url = `${ENDPOINT}?name=${restaurant}`;
 
   document.body.innerHTML += `
