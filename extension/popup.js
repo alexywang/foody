@@ -13,6 +13,6 @@ function sendSearchMessageToActiveTab(content) {
 console.log('hello');
 document.addEventListener('DOMContentLoaded', () => {
   document
-    .getElementById('search-button')
-    .addEventListener('click', (event) => sendSearchMessageToActiveTab(event.target.value));
+    .getElementById('search-form')
+    .addEventListener('submit', (event) => sendSearchMessageToActiveTab(event.target.value));
 });

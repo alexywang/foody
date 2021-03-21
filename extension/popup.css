@@ -1,6 +1,6 @@
 body {
   margin: 5px;
-  width: 200px;
+  width: 250px;
 }
 
 body * {
@@ -15,4 +15,15 @@ h1 {
 .btn-outline-success {
   color: rgba(70, 210, 160);
   border-color: rgba(70, 210, 160);
+}
+
+#search-button {
+  width: 90%;
+}
+
+input {
+  border-radius: 3px;
+  padding: 5px;
+  width: 90%;
+  border-width: 1px;
 }
