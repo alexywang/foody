@@ -1,0 +1,13 @@
+body {
+  margin: 5px;
+  width: 200px;
+}
+
+body * {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+h1 {
+  color: rgba(70, 210, 160);
+  font-weight: 150;
+}
