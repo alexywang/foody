@@ -6,7 +6,7 @@ import { SourceSelector } from './SourceSelector';
 import { FoodyOpenTable } from './OpenTable';
 import './Extension.css';
 const axios = require('axios').default;
-axios.defaults.baseURL = SERVER_URL;
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
 const getParams = () => {
   let search = window.location.search;
