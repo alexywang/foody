@@ -269,6 +269,10 @@ app.get('/restaurant', async (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello its Foody!');
+});
+
 app.listen(PORT, () => {
   console.log('Listening on port ' + PORT + '...');
 });
