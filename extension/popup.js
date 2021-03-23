@@ -10,7 +10,6 @@ function sendSearchMessageToActiveTab(content) {
   });
 }
 
-console.log('hello');
 document.addEventListener('DOMContentLoaded', () => {
   document
     .getElementById('search-form')
