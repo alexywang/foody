@@ -4,16 +4,20 @@ const { performance } = require('perf_hooks');
 const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
-const fetch = require('node-fetch');
-const { getYelpPhotos, parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
-const request = require('https').request;
-const proxy = require('express-http-proxy');
+const { parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
+const rateLimit = require('express-rate-limit');
 
 const PORT = process.env.PORT || 4000;
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
 
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 100,
+});
+
 app.use(cors());
 app.use(express.json());
+app.use(limiter);
 
 function getLocationData() {
   return axios.get('https://geolocation-db.com/json');
