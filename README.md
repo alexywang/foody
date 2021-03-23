@@ -1,13 +1,32 @@
-## Foody W.I.P.
+# Foody
 
-Foody is a Chrome Extension that takes the friction out of researching new restaurants. 
+Date Created: Feb 4, 2021 6:37 PM
+Status: Develop
 
-When you learn of a new restaurant you are potentially interested in from a blog post after Googling something like "Top restaurants in Toronto", you may decide to open up multiple more tabs to learn more about the restaurant. Maybe you go to Yelp to check out its rating and reviews, go to Instagram to get a better idea of the atmosphere, go on Google Maps to check how far away it is from you, then finally go on OpenTable to make a reservation. It takes many clicks and many websites to get all the information you might want on a restaurant. 
+# Foody
 
-Foody aims to make the process a lot faster by giving you everything you need without having to navigate away from the page you discovered the restaurant on. Simply highlight the name of the restaurant you want to learn more about, and click "Show on Foody". 
+Foody is a Chrome Extension that aims to take the friction out of researching new restaurants.
 
-The Foody window shows ratings, reviews, photos and other information from multiple sources such as Instagram, Yelp and Google. It also provides an OpenTable widget that shows reservation availability and allows you to make a reservation right then and there.
+Foody shows aggregated restaurant information from Yelp and Google in popup window that appears directly over your current webpage. An OpenTable reservation widget is also displayed to help you make an quick and easy reservation. 
 
-You no longer have to scour through multiple sources to decide if you want to go to the restaurant or not, only to find out that there are no tables avaialble anyways once you finally make up your mind and get to OpenTable.
+![Foody%20b455e5fb5dfb46a0a8ce8f448fdafb66/Untitled.png](Foody%20b455e5fb5dfb46a0a8ce8f448fdafb66/Untitled.png)
 
-<img src = "foody-screenshot.png" alt="screenshot of foody" />
+### **How to search a restaurant on Foody**
+
+1. Right clicking a highlighted restaurant name and clicking "Show on Foody" in the right-click menu
+
+![Foody%20b455e5fb5dfb46a0a8ce8f448fdafb66/Untitled%201.png](Foody%20b455e5fb5dfb46a0a8ce8f448fdafb66/Untitled%201.png)
+
+2. Clicking the Foody icon in the Chrome Extension bar and entering a restaurant name into the search bar
+
+![Foody%20b455e5fb5dfb46a0a8ce8f448fdafb66/Untitled%202.png](Foody%20b455e5fb5dfb46a0a8ce8f448fdafb66/Untitled%202.png)
+
+### Information currently available on Foody
+
+- Photos (Yelp, Google)
+- Rating (Yelp, Google)
+- Address
+- Distance from approximate location
+- OpenTable reservation widget
+
+*Note: Foody uses your approximate location to search, using a VPN may prevent Foody from finding your restaurant*
