@@ -6,7 +6,10 @@ import { SourceSelector } from './SourceSelector';
 import { FoodyOpenTable } from './OpenTable';
 import './Extension.css';
 const axios = require('axios').default;
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
+let endpoint = process.env.REACT_APP_SERVER_URL || SERVER_URL;
+console.log(endpoint);
+if (!endpoint.includes('http')) endpoint = 'https://' + endpoint;
+axios.defaults.baseURL = endpoint;
 
 const getParams = () => {
   let search = window.location.search;
@@ -41,7 +44,9 @@ export function Extension() {
         },
       });
     } catch (err) {
-      setError(err.response.data);
+      console.error(err);
+      setError(err?.response?.data);
+      return;
     }
 
     setYelpBusinessSearchData(response.data.yelpBusinessSearchData);
