@@ -17,7 +17,7 @@
     "scripts": ["background.js"]
   },
   "content_security_policy": "script-src 'self' https://example.com; object-src 'self'",
-  "permissions": ["contextMenus", "tabs"],
+  "permissions": ["contextMenus", "activeTab"],
   "icons": {
     "48": "icon.png"
   }
