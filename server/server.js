@@ -112,6 +112,29 @@ function scrapeOpenTableRestaurantPage(openTableLink) {
   return axios.get(openTableLink);
 }
 
+function getOpenTableInternalSearchApi(openTableLink) {
+  const splitLink = openTableLink.split('/r/');
+  let slug;
+  if (splitLink.length >= 2) {
+    slug = splitLink[1];
+  }
+  console.log('Getting open table internal search ' + slug);
+  return axios.get('https://www.opentable.com/widget/reservation/restaurant-search', {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1',
+    },
+    params: {
+      query: slug,
+      pageSize: 1,
+    },
+  });
+}
+function parseRidFromOpenTableInternalSearchApi(data) {
+  if (!items) return null;
+  return items[0].rid;
+}
+
 function parseRidFromOpenTableHtml(rawHtml) {
   let ridTag = rawHtml.match(/rid=[0-9]*/gm);
   if (!ridTag) {
@@ -216,7 +239,7 @@ app.get('/restaurant', async (req, res) => {
 
     // If the open table link is null, then we need to
     if (openTableLinkContainsRid(openTableLink) == null) {
-      promises.push(scrapeOpenTableRestaurantPage(openTableLink));
+      promises.push(getOpenTableInternalSearchApi(openTableLink));
     }
 
     const responses = await Promise.all(promises);
@@ -231,7 +254,9 @@ app.get('/restaurant', async (req, res) => {
     yelpPhotos = parseYelpPhotosRequest(responses[1].data);
 
     if (openTableLinkContainsRid(openTableLink) == null) {
-      openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
+      openTableLink = generateOpenTableLinkWithRid(
+        parseRidFromOpenTableInternalSearchApi(responses[2].data)
+      );
     }
   } catch (err) {
     console.error(err);
