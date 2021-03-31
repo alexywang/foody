@@ -283,6 +283,17 @@ app.get('/', (req, res) => {
   res.send('Hello its Foody!');
 });
 
+app.get('/open-table-test', (req, res) => {
+  axiosNoAuth
+    .get(
+      'https://www.opentable.com/widget/reservation/restaurant-search?query=sotto-sotto-ristorante&pageSize=3'
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.send(response.data);
+    });
+});
+
 app.listen(PORT, () => {
   console.log('Listening on port ' + PORT + '...');
 });
