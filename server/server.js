@@ -230,22 +230,8 @@ app.get('/restaurant', async (req, res) => {
     googlePlaceDetailsData = responses[0].data;
     yelpPhotos = parseYelpPhotosRequest(responses[1].data);
 
-    try {
-      if (openTableLinkContainsRid(openTableLink) == null) {
-        openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
-      }
-    } catch (err) {
-      console.error(err);
-      // TODO: Log internally somewhere to know when algorithm might be out of date.
-      res.status(500).json({
-        reason: 'ParseOpenTableRidFailed',
-        yelpBusinessSearchData: yelpBusinessSearchData,
-        googlePlaceSearchData: googlePlaceSearchTopResult,
-        googleDistanceMatrixData,
-        googlePlaceDetailsData,
-        yelpPhotos,
-        openTableLink,
-      });
+    if (openTableLinkContainsRid(openTableLink) == null) {
+      openTableLink = generateOpenTableLinkWithRid(parseRidFromOpenTableHtml(responses[2].data));
     }
   } catch (err) {
     console.error(err);
