@@ -126,7 +126,7 @@ function getOpenTableInternalSearchApi(openTableLink) {
   });
 }
 function parseRidFromOpenTableInternalSearchApi(data) {
-  if (!data?.items) return null;
+  if (!data.items) return null;
   return data.items[0].rid;
 }
 
