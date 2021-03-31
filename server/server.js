@@ -5,6 +5,7 @@ const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
 const { parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
+const { getOpenTableInternalApiSearch } = require('./open-table-scraper');
 const rateLimit = require('express-rate-limit');
 const axiosNoAuth = axios.create();
 
@@ -109,34 +110,8 @@ function openTableLinkContainsRid(link) {
   return link.match(/[0-9]+/gm);
 }
 
-function scrapeOpenTableRestaurantPage(openTableLink) {
-  return axios.get(openTableLink);
-}
-
-function getOpenTableInternalSearchApi(openTableLink) {
-  const splitLink = openTableLink.split('/');
-  let slug;
-  slug = splitLink[splitLink.length - 1];
-  console.log('Getting open table internal search ' + slug + ' ' + openTableLink);
-  return axiosNoAuth.get('https://www.opentable.com/widget/reservation/restaurant-search', {
-    params: {
-      query: slug,
-      pageSize: 1,
-    },
-  });
-}
 function parseRidFromOpenTableInternalSearchApi(data) {
-  if (!data.items) return null;
   return data.items[0].rid;
-}
-
-function parseRidFromOpenTableHtml(rawHtml) {
-  let ridTag = rawHtml.match(/rid=[0-9]*/gm);
-  if (!ridTag) {
-    return null;
-  } else {
-    return ridTag[0].split('=')[1];
-  }
 }
 
 function generateOpenTableLinkWithRid(rid) {
@@ -234,7 +209,7 @@ app.get('/restaurant', async (req, res) => {
 
     // If the open table link is null, then we need to
     if (openTableLinkContainsRid(openTableLink) == null) {
-      promises.push(getOpenTableInternalSearchApi(openTableLink));
+      promises.push(getOpenTableInternalApiSearch(openTableLink));
     }
 
     const responses = await Promise.all(promises);
@@ -250,7 +225,7 @@ app.get('/restaurant', async (req, res) => {
 
     if (openTableLinkContainsRid(openTableLink) == null) {
       openTableLink = generateOpenTableLinkWithRid(
-        parseRidFromOpenTableInternalSearchApi(responses[2].data)
+        parseRidFromOpenTableInternalSearchApi(JSON.parse(responses[2]))
       );
     }
   } catch (err) {
@@ -283,15 +258,9 @@ app.get('/', (req, res) => {
   res.send('Hello its Foody!');
 });
 
-app.get('/open-table-test', (req, res) => {
-  axiosNoAuth
-    .get(
-      'https://www.opentable.com/widget/reservation/restaurant-search?query=sotto-sotto-ristorante&pageSize=3'
-    )
-    .then((response) => {
-      console.log(response.data);
-      res.send(response.data);
-    });
+app.get('/open-table-test', async (req, res) => {
+  const x = await getOpenTableInternalApiSearch('asdf/sotto-sotto-ristorante');
+  res.send(x);
 });
 
 app.listen(PORT, () => {
