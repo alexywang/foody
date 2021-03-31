@@ -6,6 +6,7 @@ const axios = require('axios').default;
 const cors = require('cors');
 const { parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
 const rateLimit = require('express-rate-limit');
+const axiosNoAuth = axios.create();
 
 const PORT = process.env.PORT || 4000;
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
@@ -119,11 +120,7 @@ function getOpenTableInternalSearchApi(openTableLink) {
     slug = splitLink[1];
   }
   console.log('Getting open table internal search ' + slug);
-  return axios.get('https://www.opentable.com/widget/reservation/restaurant-search', {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1',
-    },
+  return axiosNoAuth.get('https://www.opentable.com/widget/reservation/restaurant-search', {
     params: {
       query: slug,
       pageSize: 1,
@@ -131,8 +128,8 @@ function getOpenTableInternalSearchApi(openTableLink) {
   });
 }
 function parseRidFromOpenTableInternalSearchApi(data) {
-  if (!items) return null;
-  return items[0].rid;
+  if (!data?.items) return null;
+  return data.items[0].rid;
 }
 
 function parseRidFromOpenTableHtml(rawHtml) {
