@@ -5,9 +5,15 @@ const app = express();
 const axios = require('axios').default;
 const cors = require('cors');
 const { parseYelpPhotosRequest, yelpPhotosRequest } = require('./yelp-scraper');
-const { getOpenTableInternalApiSearch } = require('./open-table-scraper');
+const {
+  getOpenTableInternalApiSearch,
+  scrapeOpenTableLinkFromGoogle,
+  parseOpenTableLinkFromGoogleHtml,
+  openTableLinkContainsRid,
+  parseRidFromOpenTableInternalSearchApi,
+  generateOpenTableLinkWithRid,
+} = require('./open-table-scraper');
 const rateLimit = require('express-rate-limit');
-const axiosNoAuth = axios.create();
 
 const PORT = process.env.PORT || 4000;
 axios.defaults.headers.common = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
@@ -90,32 +96,6 @@ function getGooglePhotoWithReference(photoReference) {
       maxwidth: 1600,
     },
   });
-}
-
-// OPEN TABLE
-function scrapeOpenTableLinkFromGoogle(restaurantName, country, city) {
-  return axios.get('https://google.com/search', {
-    params: {
-      q: `${restaurantName} restaurant ${city}, ${country} OpenTable`,
-    },
-  });
-}
-
-function parseOpenTableLinkFromGoogleHtml(rawHtml) {
-  let openTableLink = rawHtml.match(/[a-z]+.opentable.[a-z0-9\/]+\/[a-z0-9\/-]+/gim);
-  return openTableLink ? 'https://' + openTableLink[0] : null;
-}
-
-function openTableLinkContainsRid(link) {
-  return link.match(/[0-9]+/gm);
-}
-
-function parseRidFromOpenTableInternalSearchApi(data) {
-  return data.items[0].rid;
-}
-
-function generateOpenTableLinkWithRid(rid) {
-  return `https://opentable.com/restaurant/profile/${rid}`;
 }
 
 // Additional endpoint for google photos not required for initial load
