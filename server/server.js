@@ -114,12 +114,10 @@ function scrapeOpenTableRestaurantPage(openTableLink) {
 }
 
 function getOpenTableInternalSearchApi(openTableLink) {
-  const splitLink = openTableLink.split('/r/');
+  const splitLink = openTableLink.split('/');
   let slug;
-  if (splitLink.length >= 2) {
-    slug = splitLink[1];
-  }
-  console.log('Getting open table internal search ' + slug);
+  slug = splitLink[splitLink.length - 1];
+  console.log('Getting open table internal search ' + slug + ' ' + openTableLink);
   return axiosNoAuth.get('https://www.opentable.com/widget/reservation/restaurant-search', {
     params: {
       query: slug,
