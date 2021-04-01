@@ -239,7 +239,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/open-table-test', async (req, res) => {
-  const x = await getOpenTableInternalApiSearch('asdf/sotto-sotto-ristorante');
+  const x = await getOpenTableInternalApiSearch('opentable.com/r/sotto-sotto-ristorante');
   res.send(x);
 });
 
