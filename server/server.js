@@ -34,7 +34,6 @@ function getLocationData() {
 // YELP
 
 function getYelpBusinessSearchData(restaurantName, lat, lng) {
-  console.log('Getting Yelp Business Search');
   return axios.get('https://api.yelp.com/v3/businesses/search', {
     params: {
       term: restaurantName,
@@ -47,7 +46,6 @@ function getYelpBusinessSearchData(restaurantName, lat, lng) {
 // GOOGLE
 
 function getGoogleDistanceMatrixData(lat, lng, targetLat, targetLng, travelModes) {
-  console.log('Getting Google Distance Matrix');
   let promises = [];
   for (const travelMode of travelModes) {
     promises.push(
@@ -65,7 +63,6 @@ function getGoogleDistanceMatrixData(lat, lng, targetLat, targetLng, travelModes
 }
 
 function getGooglePlaceSearchData(restaurantName, lat, lng) {
-  console.log('Getting Google Place Search');
   return axios.get('https://maps.googleapis.com/maps/api/place/findplacefromtext/json', {
     params: {
       key: process.env.GOOGLE_API_KEY,
@@ -77,7 +74,6 @@ function getGooglePlaceSearchData(restaurantName, lat, lng) {
 }
 
 function getGooglePlaceDetails(googlePlaceId) {
-  console.log('Getting Google Place Details');
   return axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
     params: {
       key: process.env.GOOGLE_API_KEY,
