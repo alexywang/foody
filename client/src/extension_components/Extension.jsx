@@ -88,7 +88,7 @@ export function Extension() {
     <div className="extension-container">
       <div className="left-section">
         <div className="topbar">
-          <h1 className="restaurant-title">{googlePlaceSearchData?.name}</h1>
+          <h1 className="restaurant-title">{yelpBusinessSearchData?.name}</h1>
           <SourceSelector setSource={setSource} source={source} />
         </div>
         <Infobar
