@@ -11,7 +11,8 @@ function sendSearchMessageToActiveTab(content) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document
-    .getElementById('search-form')
-    .addEventListener('submit', (event) => sendSearchMessageToActiveTab(event.target.value));
+  document.getElementById('search-form').addEventListener('submit', (event) => {
+    const query = document.getElementById('search-query').value;
+    sendSearchMessageToActiveTab(query);
+  });
 });

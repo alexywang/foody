@@ -1,6 +1,7 @@
 // content.js runs javascript on active tab
 
-const ENDPOINT = 'http://localhost:3000/restaurants';
+// const ENDPOINT = 'http://localhost:3000/restaurants';
+const ENDPOINT = 'https://try-foody-client.herokuapp.com/restaurants';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === 'clicked_browser_action') {
@@ -30,6 +31,7 @@ function removeModal() {
 
 function showOnFoody(restaurant) {
   const url = `${ENDPOINT}?name=${restaurant}`;
+  console.log('Foody URL: ' + url);
 
   document.body.innerHTML += `
     <div id="foody-modal" class="foody-modal">
