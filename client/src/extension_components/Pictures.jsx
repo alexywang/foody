@@ -34,13 +34,15 @@ export function Pictures({ yelpPhotos, source, googlePlaceDetails }) {
     if (source === 'Yelp') {
       return yelpPhotos;
     } else if (source === 'Google') {
-      return googlePhotos;
+      // return googlePhotos;
+      return yelpPhotos;
     }
   }
 
   return (
     <div className="picutres-container">
-      <h3>Photos from {source}</h3>
+      {/* <h3>Photos from {source}</h3> */}
+      <h3>Photos from Yelp</h3>
       <FoodyGallery photos={getPhotosForSource()} />
     </div>
   );
