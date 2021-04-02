@@ -68,6 +68,7 @@ function getGooglePlaceSearchData(restaurantName, lat, lng) {
       key: process.env.GOOGLE_API_KEY,
       inputtype: 'textquery',
       input: restaurantName,
+      locationbias: `point:${lat},${lng}`,
       fields: 'name,opening_hours,place_id,rating,user_ratings_total',
     },
   });
