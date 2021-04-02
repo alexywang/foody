@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Foody",
-  "version": "1.0",
+  "version": "1.1",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -17,7 +17,7 @@
     "scripts": ["background.js"]
   },
   "content_security_policy": "script-src 'self' https://example.com; object-src 'self'",
-  "permissions": ["contextMenus", "activeTab"],
+  "permissions": ["contextMenus"],
   "icons": {
     "48": "icon.png"
   }
