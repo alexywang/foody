@@ -37,7 +37,7 @@ function showOnFoody(restaurant) {
     <div id="foody-modal" class="foody-modal">
       <div class="foody-modal-content">
       <span class="foody-modal-close">&times;</span>
-        <iframe class="foody-iframe" src="${url}"://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>   
+        <iframe class="foody-iframe" src="${url}" title="Foody Modal"></iframe>   
       </div>
     </div>
   `;
