@@ -1,4 +1,4 @@
-const axios = require('axios').default;
+const axios = require('axios').default.create();
 
 // Return a list of photo url's based off a business's base url
 async function getYelpPhotos(businessUrl) {
