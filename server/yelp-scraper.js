@@ -15,7 +15,12 @@ function getYelpPhotosUrl(businessUrl) {
 // Makes a get request to the public photos url of a yelp business
 function yelpPhotosRequest(businessUrl) {
   console.log('Getting Yelp Photos');
-  return axios.get(getYelpPhotosUrl(businessUrl));
+  return axios.get(getYelpPhotosUrl(businessUrl), {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
+    },
+  });
 }
 
 // Parse the HTML page from the photos request and return a list of photo urls
